@@ -50,14 +50,16 @@ public class ProductService {
         return productResponses;
     }
 
-    public Product createProduct(UserDetails userDetails, Product product) {
-        if (userDetails == null) {
-            throw new UsernameNotFoundException("You must be authenticated to create a product.");
+    public Product createProduct(Product product, String authenticatedUserName) throws AccessDeniedException {
+        User authenticatedUser = userRepository.findByName(authenticatedUserName)
+                                              .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        boolean isSeller = authenticatedUser.getRole().equals(Role.ROLE_SELLER);
+        if (!isSeller) {
+            throw new AccessDeniedException("You must be a seller to create a product.");
         }
 
-        User user = userRepository.findByName(userDetails.getUsername())
-                                  .orElseThrow(() -> new UsernameNotFoundException("Authenticated user not found in database."));
-        product.setUserId(user.getId());
+        product.setUserId(authenticatedUser.getId());
 
         return productRepository.save(product);
     }
@@ -67,6 +69,12 @@ public class ProductService {
                                            .orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + id));
         User authenticatedUser = userRepository.findByName(authenticatedUserName)
                                               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        boolean isSeller = authenticatedUser.getRole().equals(Role.ROLE_SELLER);
+        if (!isSeller) {
+            throw new AccessDeniedException("You must be a seller to update a product.");
+        }
+
         boolean isAdmin = authenticatedUser.getRole().equals(Role.ROLE_ADMIN);
         boolean isOwner = productRepository.findById(id).get().getUserId().equals(authenticatedUser.getId());
 
@@ -88,6 +96,12 @@ public class ProductService {
     public void deleteProduct(String id, String authenticatedUserName) throws AccessDeniedException {
         User authenticatedUser = userRepository.findByName(authenticatedUserName)
                                               .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+
+        boolean isSeller = authenticatedUser.getRole().equals(Role.ROLE_SELLER);
+        if (!isSeller) {
+            throw new AccessDeniedException("You must be a seller to delete a product.");
+        }
+
         boolean isAdmin = authenticatedUser.getRole().equals(Role.ROLE_ADMIN);
         String productId = productRepository.findById(id).orElse(new Product()).getUserId();
         String authUserId = authenticatedUser.getId();

@@ -78,17 +78,16 @@ public class UserService {
     }
 
     public User updateUser(String id, User updatedUser, String authenticatedUserName) {
-        User originalUser = userRepository.findById(id)
-                                        .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
+        userRepository.findById(id)
+                    .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 
         User authenticatedUser = userRepository.findByName(authenticatedUserName)
                                             .orElseThrow(() -> new UsernameNotFoundException("Authenticated user not found in database."));
 
-        if (!authenticatedUser.getRole().equals(Role.ROLE_ADMIN) && !originalUser.getRole().equals(updatedUser.getRole())) {
-            throw new AccessDeniedException("Only admins can change user roles");
+        if (!authenticatedUser.getRole().equals(Role.ROLE_ADMIN) && updatedUser.getRole().equals(Role.ROLE_ADMIN)) {
+            throw new AccessDeniedException("Only admins can update a user's role to admin.");
         }
 
-        // Now it's safe to set the ID and save the updated user
         updatedUser.setId(id);
         return userRepository.save(updatedUser);
     }

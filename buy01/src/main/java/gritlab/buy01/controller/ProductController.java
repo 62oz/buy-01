@@ -11,8 +11,6 @@ import gritlab.buy01.service.ProductService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 
 import java.nio.file.AccessDeniedException;
 import java.security.Principal;
@@ -42,8 +40,13 @@ public class ProductController {
     }
 
     @PostMapping("/product")
-    public Product create(@AuthenticationPrincipal UserDetails userDetails, @RequestBody @Valid Product product) {
-        return productService.createProduct(userDetails, product);
+    public ResponseEntity<?> createProduct(@RequestBody @Valid Product product, Principal principal) {
+        try {
+            Product createdProduct = productService.createProduct(product, principal.getName());
+            return ResponseEntity.ok("Product created: " + createdProduct);
+        } catch (AccessDeniedException e) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+        }
     }
 
     @PutMapping("/{id}")
