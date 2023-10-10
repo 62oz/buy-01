@@ -51,6 +51,15 @@ public class UserService {
     @Value("${mediaServiceAccount.default.password}")
     private String mediaServiceAccountPassword;
 
+    @Value("${authServiceAccount.default.name}")
+    private String authServiceAccountName;
+
+    @Value("${authServiceAccount.default.email}")
+    private String authServiceAccountEmail;
+
+    @Value("${authServiceAccount.default.password}")
+    private String authServiceAccountPassword;
+
     @Autowired
     private final UserRepository userRepository;
     @Autowired
@@ -180,6 +189,20 @@ public class UserService {
                     .name(mediaServiceAccountName)
                     .email(mediaServiceAccountEmail)
                     .password(passwordEncoder.encode(mediaServiceAccountPassword))
+                    .role(Role.ROLE_SERVICE)
+                    .build();
+            userRepository.save(mediaServiceAccount);
+        }
+    }
+
+    @PostConstruct
+    public void initAuthServiceAccount() {
+        // Check if the media service account exists in the DB
+        if (!userRepository.existsByEmail(authServiceAccountEmail)) {
+            User mediaServiceAccount = User.builder()
+                    .name(authServiceAccountName)
+                    .email(authServiceAccountEmail)
+                    .password(passwordEncoder.encode(authServiceAccountPassword))
                     .role(Role.ROLE_SERVICE)
                     .build();
             userRepository.save(mediaServiceAccount);

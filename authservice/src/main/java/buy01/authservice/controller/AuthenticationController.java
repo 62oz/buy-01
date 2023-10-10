@@ -1,4 +1,4 @@
-package buy01.authservice.auth;
+package buy01.authservice.controller;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,6 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import buy01.authservice.domain.AuthenticationRequest;
+import buy01.authservice.domain.AuthenticationResponse;
+import buy01.authservice.domain.RegisterRequest;
+import buy01.authservice.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

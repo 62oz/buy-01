@@ -43,5 +43,25 @@
     "name": "mediaServiceAccount.default.password",
     "type": "java.lang.String",
     "description": "A description for 'mediaServiceAccount.default.password'"
+  },
+  {
+    "name": "authServiceAccount.default.name",
+    "type": "java.lang.String",
+    "description": "A description for 'authServiceAccount.default.name'"
+  },
+  {
+    "name": "authServiceAccount.default.email",
+    "type": "java.lang.String",
+    "description": "A description for 'authServiceAccount.default.email'"
+  },
+  {
+    "name": "authServiceAccount.default.password",
+    "type": "java.lang.String",
+    "description": "A description for 'authServiceAccount.default.password'"
+  },
+  {
+    "name": "topic.name",
+    "type": "java.lang.String",
+    "description": "A description for 'topic.name'"
   }
 ]}

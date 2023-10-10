@@ -11,22 +11,11 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import buy01.authservice.repository.UserRepository;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
 @RequiredArgsConstructor
 public class ApplicationConfig {
-
-    private final UserRepository userRepository;
-
-    @Bean
-    public UserDetailsService userDetailsService() {
-        return username -> userRepository.findByName(username)
-            .orElseGet(() -> userRepository.findUserByEmail(username)
-            .orElseThrow(() -> new UsernameNotFoundException("User not found")));
-    }
 
     @Bean
     public AuthenticationProvider authenticationProvider() {

@@ -1,4 +1,4 @@
-package buy01.authservice.auth;
+package buy01.authservice.service;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -11,11 +11,12 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import buy01.authservice.config.JwtService;
-import buy01.authservice.domain.User;
+import buy01.authservice.domain.AuthenticationRequest;
+import buy01.authservice.domain.AuthenticationResponse;
+import buy01.authservice.domain.RegisterRequest;
 import buy01.authservice.enums.Role;
 import buy01.authservice.exception.CustomAuthenticationException;
 import buy01.authservice.exception.DuplicateUserException;
-import buy01.authservice.repository.UserRepository;
 
 import lombok.RequiredArgsConstructor;
 
@@ -23,7 +24,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class AuthenticationService {
 
-    private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;

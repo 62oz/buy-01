@@ -70,6 +70,13 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
 
+        <!-- Spring Cloud Dependencies -->
+
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <!-- Miscellaneous Dependencies -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
@@ -81,12 +88,6 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
-    <!--     <dependency>
-            <groupId>org.hibernate.validator</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>6.2.0.Final</version>
-        </dependency>
-    -->
     </dependencies>
 
 	<build>

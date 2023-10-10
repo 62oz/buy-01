@@ -9,7 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import gritlab.buy01.enums.Role;
+import buy01.authservice.enums.Role;
 
 import lombok.RequiredArgsConstructor;
 
@@ -26,7 +26,7 @@ public class SecurityConfig {
         http
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
-                    .requestMatchers("/auth/**", "/products/", "/", "/error").permitAll()
+                    .requestMatchers("/auth/**", "/", "/error").permitAll()
                     //.requestMatchers(HttpMethod.GET, "/users/**").hasAuthority("ROLE_ADMIN")
                     .anyRequest().authenticated()
             )
@@ -40,6 +40,4 @@ public class SecurityConfig {
 
         return http.build();
     }
-
-
 }

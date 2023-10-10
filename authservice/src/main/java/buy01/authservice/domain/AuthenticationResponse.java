@@ -1,4 +1,4 @@
-package buy01.authservice.auth;
+package buy01.authservice.domain;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
