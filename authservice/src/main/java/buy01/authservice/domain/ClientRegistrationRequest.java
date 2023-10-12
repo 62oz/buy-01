@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class RegisterRequest {
+public class ClientRegistrationRequest {
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
     @Size(min = 3, max = 12, message = "Name must be between 3 and 12 characters")

@@ -2,12 +2,14 @@ package buy01.authservice.config;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.function.Function;
 import java.util.Map;
 
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import buy01.authservice.domain.UserRegistrationRequest;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -45,6 +47,20 @@ public class JwtService {
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
             .compact();
     }
+
+    public String generateToken(UserRegistrationRequest userDto) {
+        Map<String, Object> extraClaims = new HashMap<>();
+
+        return Jwts
+            .builder()
+            .setClaims(extraClaims)
+            .setSubject(userDto.getName())
+            .setIssuedAt(new Date(System.currentTimeMillis()))
+            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
+            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .compact();
+    }
+
 
     public boolean isTokenValid(String token, UserDetails userDetails) {
         final String username = extractUsername(token);

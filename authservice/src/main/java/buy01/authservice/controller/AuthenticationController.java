@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import buy01.authservice.domain.AuthenticationRequest;
-import buy01.authservice.domain.AuthenticationResponse;
-import buy01.authservice.domain.RegisterRequest;
+import buy01.authservice.domain.ClientAuthenticationRequest;
+import buy01.authservice.domain.ClientAuthenticationResponse;
+import buy01.authservice.domain.ClientRegistrationRequest;
 import buy01.authservice.service.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -27,16 +27,16 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(
-            @Valid @RequestBody RegisterRequest request
-    ) {
+    public ResponseEntity<ClientAuthenticationResponse> register(
+            @Valid @RequestBody ClientRegistrationRequest request
+    ) throws Exception {
         return ResponseEntity.ok(authenticationService.register(request));
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(
-            @RequestBody AuthenticationRequest request
-    ) {
+    public ResponseEntity<ClientAuthenticationResponse> authenticate(
+            @RequestBody ClientAuthenticationRequest request
+    ) throws Exception {
         return ResponseEntity.ok(authenticationService.authenticate(request));
     }
 }

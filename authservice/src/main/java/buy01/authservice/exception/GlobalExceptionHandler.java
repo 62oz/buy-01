@@ -79,4 +79,10 @@ public class GlobalExceptionHandler {
         response.put("path", "/products/product"); // Or dynamically fetch the path
         return new ResponseEntity<>(response, HttpStatus.FORBIDDEN);
     }
+
+    @ExceptionHandler(Exception.class)
+    public ResponseEntity<String> handleException(Exception e) {
+        // Handle other unexpected exceptions.
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(e.getMessage());
+    }
 }

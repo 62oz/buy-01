@@ -2,18 +2,21 @@ package buy01.authservice.service;
 
 import java.security.SecureRandom;
 import java.util.Base64;
+import java.util.concurrent.CompletableFuture;
 
-import org.springframework.dao.DuplicateKeyException;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import buy01.authservice.config.JwtService;
-import buy01.authservice.domain.AuthenticationRequest;
-import buy01.authservice.domain.AuthenticationResponse;
-import buy01.authservice.domain.RegisterRequest;
+import buy01.authservice.domain.ClientAuthenticationRequest;
+import buy01.authservice.domain.ClientAuthenticationResponse;
+import buy01.authservice.domain.ClientRegistrationRequest;
+import buy01.authservice.domain.UserAuthenticationResponse;
+import buy01.authservice.domain.UserRegistrationRequest;
 import buy01.authservice.enums.Role;
 import buy01.authservice.exception.CustomAuthenticationException;
 import buy01.authservice.exception.DuplicateUserException;
@@ -27,14 +30,16 @@ public class AuthenticationService {
     private final PasswordEncoder passwordEncoder;
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
+    private final KafkaProducerService kafkaProducerService;
+    private final KafkaUserDetailsService kafkaUserDetailsService;
 
-    public AuthenticationResponse register(RegisterRequest request) throws DuplicateUserException {
+    public ClientAuthenticationResponse register(ClientRegistrationRequest request) throws Exception {
         String salt = generateRandomSalt();
         String saltedPassword = salt + request.getPassword();
         String backgroundColourHex = String.format("#%06x", new SecureRandom().nextInt(0xffffff + 1));
         String textColourHex = String.format("#%06x", new SecureRandom().nextInt(0xffffff + 1));
         String nameFormatted = request.getName().replaceAll("\\s+", "+");
-        var user = User.builder()
+        var userDto = UserRegistrationRequest.builder()
                 .name(request.getName())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(saltedPassword))
@@ -45,20 +50,16 @@ public class AuthenticationService {
                                                             + "&color=" + textColourHex)
                 .build();
 
-        try {
-            userRepository.save(user);
-        } catch (DuplicateKeyException ex) {
-            if (ex.getMessage().contains("name")) {
-                throw new DuplicateUserException("This name is already registered.");
-            } else if (ex.getMessage().contains("email")) {
-                throw new DuplicateUserException("This email is already registered.");
-            }
-            // Handle other duplicates or just throw a generic message
-            throw new DuplicateUserException("Data conflict occurred. Please try again.");
+        // Send registration request to user service via Kafka
+        CompletableFuture<Boolean> registrationFuture = kafkaProducerService.sendUserRegistrationRequest(userDto);
+        boolean registrationSuccessful = registrationFuture.get();
+
+        if (!registrationSuccessful) {
+            throw new DuplicateUserException("Registration failed. User might already exist.");
         }
 
-        var jwt = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        var jwt = jwtService.generateToken(userDto);
+        return ClientAuthenticationResponse.builder()
                 .token(jwt)
                 .build();
     }
@@ -70,12 +71,16 @@ public class AuthenticationService {
         return Base64.getEncoder().encodeToString(saltBytes);
     }
 
-    public AuthenticationResponse authenticate(AuthenticationRequest request) {
-        User user = userRepository.findByName(request.getName())
-            .orElseGet(() -> userRepository.findUserByEmail(request.getName())
-            .orElseThrow(() -> new CustomAuthenticationException("Bad credentials")));
+    public ClientAuthenticationResponse authenticate(ClientAuthenticationRequest request) throws Exception {
+        UserDetails userDetails = kafkaUserDetailsService.loadUserByUsername(request.getName());
 
-        String salt = user.getSalt();
+        if (!(userDetails instanceof UserAuthenticationResponse)) {
+            throw new CustomAuthenticationException("Bad credentials");
+        }
+
+        UserAuthenticationResponse userDto = (UserAuthenticationResponse) userDetails;
+
+        String salt = userDto.getSalt();
         if (salt == null) {
             salt = "";
         }
@@ -85,7 +90,7 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    user.getName(),
+                    userDto.getUsername(),
                     saltedPassword
                 )
             );
@@ -93,9 +98,10 @@ public class AuthenticationService {
             throw new CustomAuthenticationException("Bad credentials");
         }
 
-        var jwt = jwtService.generateToken(user);
-        return AuthenticationResponse.builder()
+        var jwt = jwtService.generateToken(userDetails);
+        return ClientAuthenticationResponse.builder()
                 .token(jwt)
                 .build();
-    }
+}
+
 }
