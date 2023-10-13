@@ -15,7 +15,7 @@ public class KafkaConsumerService {
 
     @KafkaListener(topics = "user-registration-response-topic", groupId = "auth-group")
     public void handleUserRegistrationResponse(UserRegistrationResponse response) {
-        kafkaProducerService.handleRegistrationResponse(response.getRequestId(), response.isSuccessful());
+        kafkaProducerService.handleRegistrationResponse(response.getRequestId(), response.getUserId());
     }
 
     @KafkaListener(topics = "user-details-response-topic", groupId = "auth-group")

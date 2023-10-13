@@ -20,23 +20,23 @@ public class KafkaProducerService {
 
    @Autowired
     private KafkaTemplate<String, UserRegistrationRequest> kafkaRegTemplate;
-    private final Map<String, CompletableFuture<Boolean>> responseFutures = new ConcurrentHashMap<>();
+    private final Map<String, CompletableFuture<String>> responseFutures = new ConcurrentHashMap<>();
 
-    public CompletableFuture<Boolean> sendUserRegistrationRequest(UserRegistrationRequest userDto) {
+    public CompletableFuture<String> sendUserRegistrationRequest(UserRegistrationRequest userDto) {
         String requestId = UUID.randomUUID().toString();
         userDto.setRequestId(requestId);
 
-        CompletableFuture<Boolean> future = new CompletableFuture<>();
+        CompletableFuture<String> future = new CompletableFuture<>();
         responseFutures.put(requestId, future);
 
         kafkaRegTemplate.send("user-registration-request-topic", userDto);
         return future;
     }
 
-    public void handleRegistrationResponse(String requestId, boolean isSuccessful) {
-        CompletableFuture<Boolean> future = responseFutures.get(requestId);
+    public void handleRegistrationResponse(String requestId, String userId) {
+        CompletableFuture<String> future = responseFutures.get(requestId);
         if (future != null) {
-            future.complete(isSuccessful);
+            future.complete(userId);
             responseFutures.remove(requestId);
         }
     }

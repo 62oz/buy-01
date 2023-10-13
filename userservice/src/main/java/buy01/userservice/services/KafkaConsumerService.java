@@ -36,6 +36,7 @@ public class KafkaConsumerService {
 
             AuthAuthenticationResponse response = AuthAuthenticationResponse.builder()
                 .requestId(request.getRequestId())
+                .userId(user.getId())
                 .userDetails(userDetails)
                 .role(user.getRole())
                 .avatar(user.getAvatar())
@@ -45,6 +46,7 @@ public class KafkaConsumerService {
         } catch (RuntimeException ex) {
             AuthAuthenticationResponse errorResponse = AuthAuthenticationResponse.builder()
                 .requestId(request.getRequestId())
+                .userId(null)
                 .userDetails(null)
                 .build();
             authKafkaTemplate.send("user-details-response-topic", errorResponse);

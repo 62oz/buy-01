@@ -11,5 +11,5 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserRegistrationResponse {
     private String requestId;
-    private boolean isSuccessful;
+    private String userId;
 }

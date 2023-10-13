@@ -36,6 +36,7 @@ public class JwtService {
         extraClaims.put("role", userDto.getRole().toString());
         extraClaims.put("avatar", userDto.getAvatar());
         extraClaims.put("salt", userDto.getSalt());
+        extraClaims.put("id", userDto.getUserId());
 
         return Jwts
             .builder()
@@ -53,6 +54,7 @@ public class JwtService {
         extraClaims.put("role", userDto.getRole().toString());
         extraClaims.put("avatar", userDto.getAvatar());
         extraClaims.put("salt", userDto.getSalt());
+        extraClaims.put("id", userDto.getUserId());
 
         return Jwts
             .builder()

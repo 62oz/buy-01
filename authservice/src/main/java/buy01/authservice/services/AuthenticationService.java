@@ -49,13 +49,14 @@ public class AuthenticationService {
                 .build();
 
         // Send registration request to user service via Kafka
-        CompletableFuture<Boolean> registrationFuture = kafkaProducerService.sendUserRegistrationRequest(userDto);
-        boolean registrationSuccessful = registrationFuture.get();
+        CompletableFuture<String> registrationFuture = kafkaProducerService.sendUserRegistrationRequest(userDto);
+        String userId = registrationFuture.get();
 
-        if (!registrationSuccessful) {
+        if (userId.equals("null")) {
             throw new DuplicateUserException("Registration failed. User might already exist.");
         }
 
+        userDto.setUserId(userId);
         var jwt = jwtService.generateToken(userDto);
         return ClientAuthenticationResponse.builder()
                 .token(jwt)

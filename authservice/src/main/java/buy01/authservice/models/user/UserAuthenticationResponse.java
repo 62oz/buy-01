@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserAuthenticationResponse {
     private String requestId;
+    private String userId;
     private UserDetails userDetails;
     private Role role;
     private String avatar;
