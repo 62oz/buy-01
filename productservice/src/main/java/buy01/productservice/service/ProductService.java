@@ -5,12 +5,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
 
+import buy01.productservice.config.JwtService;
 import buy01.productservice.domain.Product;
 import buy01.productservice.domain.ProductResponse;
 import buy01.productservice.enums.Role;
@@ -22,6 +21,7 @@ public class ProductService {
 
     @Autowired
     private ProductRepository productRepository;
+    private JwtService jwtService;
 
     public List<ProductResponse> getAllProducts() {
         List<Product> products = productRepository.findAll();
@@ -46,39 +46,43 @@ public class ProductService {
     }
 
     public Product createProduct(Product product, String authenticatedUserName) throws AccessDeniedException {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Object principal = authentication.getPrincipal();
-        String username = ((UserDetails) principal).getUsername();
-        if (!(principal instanceof UserDetails)) {
-            throw new AccessDeniedException("Invalid user principal.");
+        String token = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
         }
-        UserDetails userDetails = (UserDetails) principal;
-        Role role = Role.valueOf(userDetails.getAuthorities().iterator().next().getAuthority());
-        boolean isSeller = role.equals(Role.ROLE_SELLER);
 
+        String userId = jwtService.extractUserId(token);
+        Role role = Role.valueOf(jwtService.extractRole(token));
+
+        boolean isSeller = role.equals(Role.ROLE_SELLER);
         if (!isSeller) {
             throw new AccessDeniedException("You must be a seller to create a product.");
         }
 
-        product.setUserId(principal.getId());
+        product.setUserId(userId);
 
         return productRepository.save(product);
     }
 
     public Product updateProduct(String id, Product updatedProduct, String authenticatedUserName) throws AccessDeniedException {
         Product product = productRepository.findById(id)
-                                           .orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + id));
-        User authenticatedUser = userRepository.findByName(authenticatedUserName)
-                                              .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+                                    .orElseThrow(() -> new ResourceNotFoundException("Product not found for this id :: " + id));
 
-        boolean isSeller = authenticatedUser.getRole().equals(Role.ROLE_SELLER);
+        String token = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        String userId = jwtService.extractUserId(token);
+        Role role = Role.valueOf(jwtService.extractRole(token));
+
+        boolean isSeller = role.equals(Role.ROLE_SELLER);
         if (!isSeller) {
             throw new AccessDeniedException("You must be a seller to update a product.");
         }
 
-        boolean isAdmin = authenticatedUser.getRole().equals(Role.ROLE_ADMIN);
-        boolean isOwner = productRepository.findById(id).get().getUserId().equals(authenticatedUser.getId());
+        boolean isAdmin = role.equals(Role.ROLE_ADMIN);
+        boolean isOwner = productRepository.findById(id).get().getUserId().equals(userId);
 
         if (isAdmin || isOwner) {
             updatedProduct.setId(id);
@@ -96,20 +100,24 @@ public class ProductService {
     }
 
     public void deleteProduct(String id, String authenticatedUserName) throws AccessDeniedException {
-        User authenticatedUser = userRepository.findByName(authenticatedUserName)
-                                              .orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        String token = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
 
-        boolean isSeller = authenticatedUser.getRole().equals(Role.ROLE_SELLER);
+        String userId = jwtService.extractUserId(token);
+        Role role = Role.valueOf(jwtService.extractRole(token));
+
+        boolean isSeller = role.equals(Role.ROLE_SELLER);
         if (!isSeller) {
             throw new AccessDeniedException("You must be a seller to delete a product.");
         }
 
-        boolean isAdmin = authenticatedUser.getRole().equals(Role.ROLE_ADMIN);
+        boolean isAdmin = role.equals(Role.ROLE_ADMIN);
         String productId = productRepository.findById(id).orElse(new Product()).getUserId();
-        String authUserId = authenticatedUser.getId();
         boolean isOwner = false;
-        if (productId != null && authUserId != null) {
-            isOwner = productId.equals(authUserId);
+        if (productId != null && userId != null) {
+            isOwner = productId.equals(userId);
         }
 
         if (isAdmin || isOwner) {
@@ -120,18 +128,25 @@ public class ProductService {
     }
 
     private ProductResponse mapToProductResponse(Product product) {
-        User authenticatedUser = getAuthenticatedUser();
+        String token = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("Authorization");
+        if (token != null && token.startsWith("Bearer ")) {
+            token = token.substring(7);
+        }
+
+        String userId = jwtService.extractUserId(token);
+        Role role = Role.valueOf(jwtService.extractRole(token));
+
 
         ProductResponse.ProductResponseBuilder responseBuilder = ProductResponse.builder()
                                                                                  .id("hidden")
-                                                                                 .name(product.getUsername())
+                                                                                 .name(product.getName())
                                                                                  .description(product.getDescription())
                                                                                  .price(product.getPrice())
                                                                                  .userId("hidden");
 
-        if (authenticatedUser != null) {
-            boolean isAdmin = authenticatedUser.getRole().equals(Role.ROLE_ADMIN);
-            boolean isOwner = authenticatedUser.getId().equals(product.getUserId());
+        if (token != null) {
+            boolean isAdmin = role.equals(Role.ROLE_ADMIN);
+            boolean isOwner = userId.equals(product.getUserId());
 
             if (isAdmin || isOwner) {
                 responseBuilder.id(product.getId())
@@ -141,16 +156,4 @@ public class ProductService {
 
         return responseBuilder.build();
     }
-
-    private User getAuthenticatedUser() {
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null || !(authentication.getPrincipal() instanceof UserDetails)) {
-            return null;
-        }
-
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userRepository.findByName(userDetails.getUsername())
-                             .orElse(null);
-    }
-
 }

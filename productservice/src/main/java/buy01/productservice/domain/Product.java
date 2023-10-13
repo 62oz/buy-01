@@ -16,7 +16,7 @@ public class Product {
     private String id;
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
-    private String username;
+    private String name;
     private String description;
     @NotNull(message = "Price cannot be null")
     @DecimalMin(value = "0.0", inclusive = true, message = "Price must be non-negative")
