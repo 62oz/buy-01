@@ -9,7 +9,7 @@ import org.springframework.security.config.annotation.authentication.configurati
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import buy01.authservice.service.KafkaUserDetailsService;
+import buy01.authservice.services.KafkaUserDetailsService;
 import lombok.RequiredArgsConstructor;
 
 @Configuration

@@ -9,8 +9,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import buy01.userservice.enums.Role;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -27,7 +25,6 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests ->
                 authorizeRequests
                     .requestMatchers("/", "/error").permitAll()
-                    //.requestMatchers(HttpMethod.GET, "/users/**").hasAuthority("ROLE_ADMIN")
                     .anyRequest().authenticated()
             )
             .sessionManagement(sessionManagement ->

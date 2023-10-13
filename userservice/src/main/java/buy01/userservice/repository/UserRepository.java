@@ -5,7 +5,7 @@ import java.util.Optional;
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.data.mongodb.repository.Query;
 
-import buy01.userservice.domain.User;
+import buy01.userservice.models.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
     Optional<User> findByName(String name);
