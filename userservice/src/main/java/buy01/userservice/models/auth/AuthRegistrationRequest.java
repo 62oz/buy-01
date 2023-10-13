@@ -1,4 +1,4 @@
-package buy01.userservice.models;
+package buy01.userservice.models.auth;
 
 import buy01.userservice.enums.Role;
 import lombok.AllArgsConstructor;

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import buy01.authservice.models.ClientAuthenticationRequest;
-import buy01.authservice.models.ClientAuthenticationResponse;
-import buy01.authservice.models.ClientRegistrationRequest;
+import buy01.authservice.models.client.ClientAuthenticationRequest;
+import buy01.authservice.models.client.ClientAuthenticationResponse;
+import buy01.authservice.models.client.ClientRegistrationRequest;
 import buy01.authservice.services.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;

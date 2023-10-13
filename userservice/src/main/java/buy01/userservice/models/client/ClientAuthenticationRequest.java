@@ -1,4 +1,4 @@
-package buy01.authservice.models;
+package buy01.userservice.models.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserAuthenticationRequest {
-    private String requestId;
-    private String username;
+public class ClientAuthenticationRequest {
+    String requestId;
+    String username;
 }

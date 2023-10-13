@@ -11,7 +11,7 @@ import java.security.Principal;
 import java.util.List;
 
 import buy01.userservice.models.User;
-import buy01.userservice.models.ClientResponse;
+import buy01.userservice.models.client.ClientResponse;
 import buy01.userservice.services.UserService;
 import jakarta.validation.Valid;
 
@@ -43,8 +43,8 @@ public class UserController {
 
     @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SERVICE\") or #name == principal.name")
     @GetMapping("/byName/{name}")
-    public ClientResponse getByName(@PathVariable String name) {
-        return userService.getUserByName(name);
+    public ClientResponse getByName(@PathVariable String username) {
+        return userService.getUserByName(username);
     }
 
     @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SERVICE\") or #email == principal.email")

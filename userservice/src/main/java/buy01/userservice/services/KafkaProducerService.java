@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Service;
 
-import buy01.userservice.models.AuthAuthenticationResponse;
-import buy01.userservice.models.AuthRegistrationResponse;
+import buy01.userservice.models.auth.AuthAuthenticationResponse;
+import buy01.userservice.models.auth.AuthRegistrationResponse;
 
 @Service
 public class KafkaProducerService {

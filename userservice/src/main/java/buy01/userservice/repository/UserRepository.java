@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.repository.Query;
 import buy01.userservice.models.User;
 
 public interface UserRepository extends MongoRepository<User, String> {
-    Optional<User> findByName(String name);
+    Optional<User> findByName(String username);
     Optional<User> findUserByEmail(String email);
 
     @Query("{'productId.userId': ?0}")

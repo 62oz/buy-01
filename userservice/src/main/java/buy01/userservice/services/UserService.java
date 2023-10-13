@@ -16,8 +16,8 @@ import org.springframework.stereotype.Service;
 import buy01.userservice.enums.Role;
 import buy01.userservice.exceptions.ResourceNotFoundException;
 import buy01.userservice.models.User;
-import buy01.userservice.models.ClientResponse.ClientResponseBuilder;
-import buy01.userservice.models.ClientResponse;
+import buy01.userservice.models.client.ClientResponse;
+import buy01.userservice.models.client.ClientResponse.ClientResponseBuilder;
 import buy01.userservice.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
@@ -85,8 +85,8 @@ public class UserService {
         return mapToClientResponse(user);
     }
 
-    public ClientResponse getUserByName(String name) {
-        User user = userRepository.findByName(name).orElseThrow();
+    public ClientResponse getUserByName(String username) {
+        User user = userRepository.findByName(username).orElseThrow();
         return mapToClientResponse(user);
     }
 
@@ -119,7 +119,7 @@ public class UserService {
         User authenticatedUser = getAuthenticatedUser();
 
         ClientResponseBuilder responseBuilder = ClientResponse.builder()
-                                                                    .name(user.getUsername())
+                                                                    .username(user.getUsername())
                                                                     .email(user.getEmail())
                                                                     .id("hidden");
 

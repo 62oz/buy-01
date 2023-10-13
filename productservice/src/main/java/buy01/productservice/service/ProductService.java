@@ -53,7 +53,9 @@ public class ProductService {
         if (!(principal instanceof UserDetails)) {
             throw new AccessDeniedException("Invalid user principal.");
         }
-        boolean isSeller = ((UserDetails) principal).getRole().equals(Role.ROLE_SELLER);
+        UserDetails userDetails = (UserDetails) principal;
+        Role role = Role.valueOf(userDetails.getAuthorities().iterator().next().getAuthority());
+        boolean isSeller = role.equals(Role.ROLE_SELLER);
 
         if (!isSeller) {
             throw new AccessDeniedException("You must be a seller to create a product.");
@@ -122,7 +124,7 @@ public class ProductService {
 
         ProductResponse.ProductResponseBuilder responseBuilder = ProductResponse.builder()
                                                                                  .id("hidden")
-                                                                                 .name(product.getName())
+                                                                                 .name(product.getUsername())
                                                                                  .description(product.getDescription())
                                                                                  .price(product.getPrice())
                                                                                  .userId("hidden");

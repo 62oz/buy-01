@@ -15,11 +15,11 @@ import buy01.authservice.config.JwtService;
 import buy01.authservice.enums.Role;
 import buy01.authservice.exceptions.CustomAuthenticationException;
 import buy01.authservice.exceptions.DuplicateUserException;
-import buy01.authservice.models.ClientAuthenticationRequest;
-import buy01.authservice.models.ClientAuthenticationResponse;
-import buy01.authservice.models.ClientRegistrationRequest;
-import buy01.authservice.models.UserAuthenticationResponse;
-import buy01.authservice.models.UserRegistrationRequest;
+import buy01.authservice.models.client.ClientAuthenticationRequest;
+import buy01.authservice.models.client.ClientAuthenticationResponse;
+import buy01.authservice.models.client.ClientRegistrationRequest;
+import buy01.authservice.models.user.UserAuthenticationResponse;
+import buy01.authservice.models.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service
@@ -30,7 +30,6 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final KafkaProducerService kafkaProducerService;
-    private final KafkaUserDetailsService kafkaUserDetailsService;
 
     public ClientAuthenticationResponse register(ClientRegistrationRequest request) throws Exception {
         String salt = generateRandomSalt();
@@ -39,7 +38,7 @@ public class AuthenticationService {
         String textColourHex = String.format("#%06x", new SecureRandom().nextInt(0xffffff + 1));
         String nameFormatted = request.getUsername().replaceAll("\\s+", "+");
         var userDto = UserRegistrationRequest.builder()
-                .name(request.getUsername())
+                .username(request.getUsername())
                 .email(request.getEmail())
                 .password(passwordEncoder.encode(saltedPassword))
                 .salt(salt)
@@ -71,13 +70,8 @@ public class AuthenticationService {
     }
 
     public ClientAuthenticationResponse authenticate(ClientAuthenticationRequest request) throws Exception {
-        UserDetails userDetails = kafkaUserDetailsService.loadUserByUsername(request.getUsername());
-
-        if (!(userDetails instanceof UserAuthenticationResponse)) {
-            throw new CustomAuthenticationException("Bad credentials");
-        }
-
-        UserAuthenticationResponse userDto = (UserAuthenticationResponse) userDetails;
+        UserAuthenticationResponse userDto = kafkaProducerService.getUserByUsername(request.getUsername());
+        UserDetails userDetails = userDto.getUserDetails();
 
         String salt = userDto.getSalt();
         if (salt == null) {
@@ -89,7 +83,7 @@ public class AuthenticationService {
         try {
             authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                    userDto.getUsername(),
+                    userDetails.getUsername(),
                     saltedPassword
                 )
             );
@@ -97,10 +91,9 @@ public class AuthenticationService {
             throw new CustomAuthenticationException("Bad credentials");
         }
 
-        var jwt = jwtService.generateToken(userDetails);
+        var jwt = jwtService.generateToken(userDto);
         return ClientAuthenticationResponse.builder()
                 .token(jwt)
                 .build();
-}
-
+    }
 }

@@ -1,4 +1,4 @@
-package buy01.userservice.models;
+package buy01.authservice.models.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,9 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class ClientResponse {
-    String id;
-    String name;
-    String email;
-    String avatar;
+public class UserAuthenticationRequest {
+    private String requestId;
+    private String username;
 }

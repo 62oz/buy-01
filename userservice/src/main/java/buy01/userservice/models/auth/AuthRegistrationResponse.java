@@ -1,4 +1,4 @@
-package buy01.userservice.models;
+package buy01.userservice.models.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;

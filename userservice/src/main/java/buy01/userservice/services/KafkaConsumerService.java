@@ -6,11 +6,11 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.userservice.models.AuthRegistrationRequest;
-import buy01.userservice.models.AuthRegistrationResponse;
-import buy01.userservice.models.ClientAuthenticationRequest;
 import buy01.userservice.models.User;
-import buy01.userservice.models.UserDetailsKafkaResponse;
+import buy01.userservice.models.auth.AuthAuthenticationResponse;
+import buy01.userservice.models.auth.AuthRegistrationRequest;
+import buy01.userservice.models.auth.AuthRegistrationResponse;
+import buy01.userservice.models.client.ClientAuthenticationRequest;
 import buy01.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -21,7 +21,7 @@ public class KafkaConsumerService {
     @Autowired
     private UserRepository userRepository;
 
-    private final KafkaTemplate<String, UserDetailsKafkaResponse> userDetailsKafkaTemplate;
+    private final KafkaTemplate<String, AuthAuthenticationResponse> authKafkaTemplate;
 
     @KafkaListener(topics = "user-details-request-topic", groupId = "userservice-group")
     public void handleUserDetailsRequest(ClientAuthenticationRequest request) {
@@ -32,21 +32,22 @@ public class KafkaConsumerService {
             UserDetails userDetails = User.builder()
                 .username(user.getUsername())
                 .password(user.getPassword())
-                .role(user.getRole())
                 .build();
 
-            UserDetailsKafkaResponse response = UserDetailsKafkaResponse.builder()
+            AuthAuthenticationResponse response = AuthAuthenticationResponse.builder()
                 .requestId(request.getRequestId())
                 .userDetails(userDetails)
+                .role(user.getRole())
+                .avatar(user.getAvatar())
                 .build();
 
-            userDetailsKafkaTemplate.send("user-details-response-topic", response);
+            authKafkaTemplate.send("user-details-response-topic", response);
         } catch (RuntimeException ex) {
-            UserDetailsKafkaResponse errorResponse = UserDetailsKafkaResponse.builder()
+            AuthAuthenticationResponse errorResponse = AuthAuthenticationResponse.builder()
                 .requestId(request.getRequestId())
                 .userDetails(null)
                 .build();
-            userDetailsKafkaTemplate.send("user-details-response-topic", errorResponse);
+            authKafkaTemplate.send("user-details-response-topic", errorResponse);
         }
     }
 

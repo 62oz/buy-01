@@ -1,4 +1,4 @@
-package buy01.authservice.models;
+package buy01.authservice.models.client;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
