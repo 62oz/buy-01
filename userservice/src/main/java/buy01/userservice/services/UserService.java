@@ -96,14 +96,32 @@ public class UserService {
     }
 
     public User updateUser(String id, User updatedUser, String authenticatedUserName) {
-        userRepository.findById(id)
+        User originalUser = userRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 
         User authenticatedUser = userRepository.findByName(authenticatedUserName)
                                             .orElseThrow(() -> new UsernameNotFoundException("Authenticated user not found in database."));
 
-        if (!authenticatedUser.getRole().equals(Role.ROLE_ADMIN) && updatedUser.getRole().equals(Role.ROLE_ADMIN)) {
-            throw new AccessDeniedException("Only admins can update a user's role to admin.");
+        if (!authenticatedUser.getRole().equals(Role.ROLE_ADMIN)
+            && !originalUser.getRole().equals(updatedUser.getRole())
+            && updatedUser.getRole() != null) {
+            throw new AccessDeniedException("Only admins can change user roles");
+        }
+
+        if (updatedUser.getUsername() == null) {
+            updatedUser.setUsername(originalUser.getUsername());
+        }
+
+        if (updatedUser.getEmail() == null) {
+            updatedUser.setEmail(originalUser.getEmail());
+        }
+
+        if (updatedUser.getPassword() == null) {
+            updatedUser.setPassword(originalUser.getPassword());
+        }
+
+        if (updatedUser.getRole() == null) {
+            updatedUser.setRole(originalUser.getRole());
         }
 
         updatedUser.setId(id);

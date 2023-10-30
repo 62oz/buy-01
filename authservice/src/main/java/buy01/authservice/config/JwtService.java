@@ -9,6 +9,7 @@ import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import buy01.authservice.exceptions.InvalidJwtTokenException;
 import buy01.authservice.models.user.UserAuthenticationResponse;
 import buy01.authservice.models.user.UserRegistrationRequest;
 import io.jsonwebtoken.Claims;
@@ -23,7 +24,11 @@ public class JwtService {
     private static final String SECRET_KEY = "9e4ac61feadc39c7494c7db0aa739c8e0935b171e48ab4a9b443fc76c2df123d";
 
     public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
+        try {
+            return extractClaim(token, Claims::getSubject);
+        } catch (io.jsonwebtoken.JwtException | IllegalArgumentException e) {
+            throw new InvalidJwtTokenException("Invalid JWT token.");
+        }
     }
 
     public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
