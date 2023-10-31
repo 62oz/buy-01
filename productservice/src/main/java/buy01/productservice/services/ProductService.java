@@ -1,4 +1,4 @@
-package buy01.productservice.service;
+package buy01.productservice.services;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -10,11 +10,11 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import buy01.productservice.config.JwtService;
-import buy01.productservice.domain.Product;
-import buy01.productservice.domain.ProductResponse;
+import buy01.productservice.domains.Product;
+import buy01.productservice.domains.ProductResponse;
 import buy01.productservice.enums.Role;
-import buy01.productservice.exception.ResourceNotFoundException;
-import buy01.productservice.repository.ProductRepository;
+import buy01.productservice.exceptions.ResourceNotFoundException;
+import buy01.productservice.repositories.ProductRepository;
 
 @Service
 public class ProductService {

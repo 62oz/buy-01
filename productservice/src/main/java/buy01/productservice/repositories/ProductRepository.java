@@ -1,7 +1,9 @@
-package buy01.productservice.repository;
+package buy01.productservice.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import buy01.productservice.domain.Product;
+
+import buy01.productservice.domains.Product;
+
 import java.util.List;
 
 public interface ProductRepository extends MongoRepository<Product, String> {

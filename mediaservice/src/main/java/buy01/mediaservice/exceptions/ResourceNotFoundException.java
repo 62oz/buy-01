@@ -1,4 +1,4 @@
-package buy01.productservice.exception;
+package buy01.mediaservice.exceptions;
 
 // ResourceNotFoundException.java
 public class ResourceNotFoundException extends RuntimeException {

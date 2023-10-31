@@ -1,4 +1,4 @@
-package buy01.productservice.domain;
+package buy01.productservice.domains;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

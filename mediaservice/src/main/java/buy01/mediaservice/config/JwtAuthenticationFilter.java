@@ -1,4 +1,4 @@
-package buy01.productservice.config;
+package buy01.mediaservice.config;
 
 import java.io.IOException;
 
@@ -10,9 +10,9 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
+import buy01.mediaservice.exceptions.InvalidJwtTokenException;
 import com.mongodb.lang.NonNull;
 
-import buy01.productservice.exceptions.InvalidJwtTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

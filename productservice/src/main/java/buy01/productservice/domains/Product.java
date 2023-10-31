@@ -1,4 +1,4 @@
-package buy01.productservice.domain;
+package buy01.productservice.domains;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -7,9 +7,13 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import org.springframework.data.annotation.Id;
+
 @Document
 @Data
-public class ClientProductRequest {
+public class Product {
+    @Id
+    private String id;
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
     private String name;
@@ -20,4 +24,5 @@ public class ClientProductRequest {
     @NotNull(message = "Price cannot be null")
     @DecimalMin(value = "0", inclusive = true, message = "Quantity must be non-negative")
     private Integer quantity;
+    private String userId;
 }

@@ -1,4 +1,4 @@
-package buy01.productservice.exception;
+package buy01.productservice.exceptions;
 
 public class InvalidJwtTokenException extends RuntimeException {
 

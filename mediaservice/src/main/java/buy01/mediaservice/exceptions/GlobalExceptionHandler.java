@@ -1,4 +1,4 @@
-package buy01.productservice.exception;
+package buy01.mediaservice.exceptions;
 
 import java.util.Date;
 import java.util.HashMap;

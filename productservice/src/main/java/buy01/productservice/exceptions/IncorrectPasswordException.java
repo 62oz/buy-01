@@ -1,4 +1,4 @@
-package buy01.productservice.exception;
+package buy01.productservice.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

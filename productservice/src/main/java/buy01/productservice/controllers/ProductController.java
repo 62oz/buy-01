@@ -1,13 +1,12 @@
-package buy01.productservice.controller;
+package buy01.productservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import buy01.productservice.domain.Product;
-import buy01.productservice.domain.ProductResponse;
-import buy01.productservice.service.ProductService;
-
+import buy01.productservice.domains.Product;
+import buy01.productservice.domains.ProductResponse;
+import buy01.productservice.services.ProductService;
 import jakarta.validation.Valid;
 
 import org.springframework.http.ResponseEntity;
