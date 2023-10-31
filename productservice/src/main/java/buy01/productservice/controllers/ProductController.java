@@ -4,8 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import buy01.productservice.domains.Product;
-import buy01.productservice.domains.ProductResponse;
+import buy01.productservice.models.Product;
+import buy01.productservice.models.ProductResponse;
 import buy01.productservice.services.ProductService;
 import jakarta.validation.Valid;
 

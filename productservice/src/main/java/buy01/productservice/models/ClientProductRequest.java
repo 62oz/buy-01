@@ -1,4 +1,4 @@
-package buy01.productservice.domains;
+package buy01.productservice.models;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

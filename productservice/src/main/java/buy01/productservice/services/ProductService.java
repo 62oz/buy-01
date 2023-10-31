@@ -10,10 +10,10 @@ import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
 import buy01.productservice.config.JwtService;
-import buy01.productservice.domains.Product;
-import buy01.productservice.domains.ProductResponse;
 import buy01.productservice.enums.Role;
 import buy01.productservice.exceptions.ResourceNotFoundException;
+import buy01.productservice.models.Product;
+import buy01.productservice.models.ProductResponse;
 import buy01.productservice.repositories.ProductRepository;
 
 @Service
