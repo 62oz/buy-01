@@ -1,0 +1,154 @@
+.
+├── authservice
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── buy01
+│   │   │   │       └── authservice
+│   │   │   │           ├── config
+│   │   │   │           ├── controllers
+│   │   │   │           ├── enums
+│   │   │   │           ├── exceptions
+│   │   │   │           ├── models
+│   │   │   │           │   ├── client
+│   │   │   │           │   └── user
+│   │   │   │           └── services
+│   │   │   └── resources
+│   │   │       └── META-INF
+│   │   └── test
+│   │       └── java
+│   │           └── buy01
+│   │               └── authservice
+│   └── target
+│       ├── classes
+│       │   ├── META-INF
+│       │   └── buy01
+│       │       └── authservice
+│       │           ├── config
+│       │           ├── controllers
+│       │           ├── enums
+│       │           ├── exceptions
+│       │           ├── models
+│       │           │   ├── client
+│       │           │   └── user
+│       │           └── services
+│       ├── generated-sources
+│       │   └── annotations
+│       ├── generated-test-sources
+│       │   └── test-annotations
+│       └── test-classes
+│           └── buy01
+│               └── authservice
+├── logs
+├── mediaservice
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── buy01
+│   │   │   │       └── mediaservice
+│   │   │   │           ├── config
+│   │   │   │           ├── enums
+│   │   │   │           ├── exceptions
+│   │   │   │           ├── models
+│   │   │   │           └── repositories
+│   │   │   └── resources
+│   │   └── test
+│   │       └── java
+│   │           └── buy01
+│   │               └── mediaservice
+│   └── target
+│       ├── classes
+│       │   └── buy01
+│       │       └── mediaservice
+│       │           ├── config
+│       │           ├── enums
+│       │           ├── exceptions
+│       │           ├── models
+│       │           └── repositories
+│       ├── generated-sources
+│       │   └── annotations
+│       ├── generated-test-sources
+│       │   └── test-annotations
+│       └── test-classes
+│           └── buy01
+│               └── mediaservice
+├── productservice
+│   ├── src
+│   │   ├── main
+│   │   │   ├── java
+│   │   │   │   └── buy01
+│   │   │   │       └── productservice
+│   │   │   │           ├── config
+│   │   │   │           ├── controllers
+│   │   │   │           ├── enums
+│   │   │   │           ├── exceptions
+│   │   │   │           ├── models
+│   │   │   │           ├── repositories
+│   │   │   │           └── services
+│   │   │   └── resources
+│   │   └── test
+│   │       └── java
+│   │           └── buy01
+│   │               └── productservice
+│   └── target
+│       ├── classes
+│       │   └── buy01
+│       │       └── productservice
+│       │           ├── config
+│       │           ├── controllers
+│       │           ├── enums
+│       │           ├── exceptions
+│       │           ├── models
+│       │           ├── repositories
+│       │           └── services
+│       ├── generated-sources
+│       │   └── annotations
+│       ├── generated-test-sources
+│       │   └── test-annotations
+│       └── test-classes
+│           └── buy01
+│               └── productservice
+└── userservice
+    ├── src
+    │   ├── main
+    │   │   ├── java
+    │   │   │   └── buy01
+    │   │   │       └── userservice
+    │   │   │           ├── config
+    │   │   │           ├── controllers
+    │   │   │           ├── enums
+    │   │   │           ├── exceptions
+    │   │   │           ├── models
+    │   │   │           │   ├── auth
+    │   │   │           │   └── client
+    │   │   │           ├── repository
+    │   │   │           └── services
+    │   │   └── resources
+    │   │       └── META-INF
+    │   └── test
+    │       └── java
+    │           └── buy01
+    │               └── userservice
+    └── target
+        ├── classes
+        │   ├── META-INF
+        │   └── buy01
+        │       └── userservice
+        │           ├── config
+        │           ├── controllers
+        │           ├── enums
+        │           ├── exceptions
+        │           ├── models
+        │           │   ├── auth
+        │           │   └── client
+        │           ├── repository
+        │           └── services
+        ├── generated-sources
+        │   └── annotations
+        ├── generated-test-sources
+        │   └── test-annotations
+        └── test-classes
+            └── buy01
+                └── userservice
+
+152 directories
