@@ -1,4 +1,4 @@
-package buy01.ms-user.config;
+package buy01.userservice.config;
 
 import java.security.Key;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-user.exceptions.InvalidJwtTokenException;
+import buy01.userservice.exceptions.InvalidJwtTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

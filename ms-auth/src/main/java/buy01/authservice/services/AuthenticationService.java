@@ -1,4 +1,4 @@
-package buy01.ms-auth.services;
+package buy01.authservice.services;
 
 import java.security.SecureRandom;
 import java.util.Base64;
@@ -11,15 +11,15 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-auth.config.JwtService;
-import buy01.ms-auth.enums.Role;
-import buy01.ms-auth.exceptions.CustomAuthenticationException;
-import buy01.ms-auth.exceptions.DuplicateUserException;
-import buy01.ms-auth.models.client.ClientAuthenticationRequest;
-import buy01.ms-auth.models.client.ClientAuthenticationResponse;
-import buy01.ms-auth.models.client.ClientRegistrationRequest;
-import buy01.ms-auth.models.user.UserAuthenticationResponse;
-import buy01.ms-auth.models.user.UserRegistrationRequest;
+import buy01.authservice.config.JwtService;
+import buy01.authservice.enums.Role;
+import buy01.authservice.exceptions.CustomAuthenticationException;
+import buy01.authservice.exceptions.DuplicateUserException;
+import buy01.authservice.models.client.ClientAuthenticationRequest;
+import buy01.authservice.models.client.ClientAuthenticationResponse;
+import buy01.authservice.models.client.ClientRegistrationRequest;
+import buy01.authservice.models.user.UserAuthenticationResponse;
+import buy01.authservice.models.user.UserRegistrationRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service

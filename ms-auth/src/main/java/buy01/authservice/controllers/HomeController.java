@@ -1,4 +1,4 @@
-package buy01.ms-auth.controllers;
+package buy01.authservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

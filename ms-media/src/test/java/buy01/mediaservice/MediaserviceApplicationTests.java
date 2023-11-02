@@ -1,4 +1,4 @@
-package buy01.ms-media;
+package buy01.mediaservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

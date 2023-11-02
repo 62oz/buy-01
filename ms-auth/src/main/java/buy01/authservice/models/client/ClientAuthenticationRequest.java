@@ -1,4 +1,4 @@
-package buy01.ms-auth.models.client;
+package buy01.authservice.models.client;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;

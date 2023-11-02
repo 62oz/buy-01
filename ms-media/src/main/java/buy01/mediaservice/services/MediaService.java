@@ -1,4 +1,4 @@
-package buy01.ms-media.services;
+package buy01.mediaservice.services;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -8,12 +8,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import buy01.ms-media.config.JwtService;
-import buy01.ms-media.enums.Role;
-import buy01.ms-media.exceptions.ResourceNotFoundException;
-import buy01.ms-media.repositories.MediaRepository;
-import buy01.ms-media.models.Media;
-import buy01.ms-media.models.MediaResponse;
+import buy01.mediaservice.config.JwtService;
+import buy01.mediaservice.enums.Role;
+import buy01.mediaservice.exceptions.ResourceNotFoundException;
+import buy01.mediaservice.repositories.MediaRepository;
+import buy01.mediaservice.models.Media;
+import buy01.mediaservice.models.MediaResponse;
 
 public class MediaService {
 

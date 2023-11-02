@@ -11,9 +11,9 @@
 
 
 	<groupId>buy01</groupId>
-	<artifactId>ms-media</artifactId>
+	<artifactId>mediaservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-media</name>
+	<name>mediaservice</name>
 
 	<properties>
 		<java.version>17</java.version>

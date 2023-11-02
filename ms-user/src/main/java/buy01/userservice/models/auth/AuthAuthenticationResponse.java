@@ -1,8 +1,8 @@
-package buy01.ms-user.models.auth;
+package buy01.userservice.models.auth;
 
 import org.springframework.security.core.userdetails.UserDetails;
 
-import buy01.ms-user.enums.Role;
+import buy01.userservice.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

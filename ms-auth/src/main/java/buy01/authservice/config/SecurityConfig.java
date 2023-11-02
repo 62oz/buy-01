@@ -1,4 +1,4 @@
-package buy01.ms-auth.config;
+package buy01.authservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -9,7 +9,7 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import buy01.ms-auth.enums.Role;
+import buy01.authservice.enums.Role;
 
 import lombok.RequiredArgsConstructor;
 

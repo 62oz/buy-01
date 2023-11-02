@@ -1,4 +1,4 @@
-package buy01.ms-product.config;
+package buy01.productservice.config;
 
 import java.security.Key;
 import java.util.Date;
@@ -7,7 +7,7 @@ import java.util.function.Function;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-product.exceptions.InvalidJwtTokenException;
+import buy01.productservice.exceptions.InvalidJwtTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;

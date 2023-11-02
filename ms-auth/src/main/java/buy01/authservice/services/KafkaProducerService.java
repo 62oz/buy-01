@@ -1,4 +1,4 @@
-package buy01.ms-auth.services;
+package buy01.authservice.services;
 
 import java.util.Map;
 import java.util.UUID;
@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
-import buy01.ms-auth.models.user.UserAuthenticationRequest;
-import buy01.ms-auth.models.user.UserAuthenticationResponse;
-import buy01.ms-auth.models.user.UserRegistrationRequest;
+import buy01.authservice.models.user.UserAuthenticationRequest;
+import buy01.authservice.models.user.UserAuthenticationResponse;
+import buy01.authservice.models.user.UserRegistrationRequest;
 
 public class KafkaProducerService {
 

@@ -1,11 +1,11 @@
-package buy01.ms-auth.services;
+package buy01.authservice.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-auth.models.user.UserAuthenticationResponse;
-import buy01.ms-auth.models.user.UserRegistrationResponse;
+import buy01.authservice.models.user.UserAuthenticationResponse;
+import buy01.authservice.models.user.UserRegistrationResponse;
 
 @Service
 public class KafkaConsumerService {

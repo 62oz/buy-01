@@ -1,4 +1,4 @@
-package buy01.ms-auth.exceptions;
+package buy01.authservice.exceptions;
 
 public class CustomAuthenticationException extends RuntimeException {
     public CustomAuthenticationException(String message) {

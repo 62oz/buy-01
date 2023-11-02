@@ -1,4 +1,4 @@
-package buy01.ms-user.controllers;
+package buy01.userservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

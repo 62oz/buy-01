@@ -1,4 +1,4 @@
-package buy01.ms-user.models.client;
+package buy01.userservice.models.client;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

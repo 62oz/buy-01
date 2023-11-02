@@ -1,4 +1,4 @@
-package buy01.ms-product.controllers;
+package buy01.productservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

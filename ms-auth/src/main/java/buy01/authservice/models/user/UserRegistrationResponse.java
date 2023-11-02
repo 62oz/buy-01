@@ -1,4 +1,4 @@
-package buy01.ms-auth.models.user;
+package buy01.authservice.models.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

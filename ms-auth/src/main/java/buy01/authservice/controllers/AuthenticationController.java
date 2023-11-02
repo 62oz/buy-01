@@ -1,4 +1,4 @@
-package buy01.ms-auth.controllers;
+package buy01.authservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -7,10 +7,10 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import buy01.ms-auth.models.client.ClientAuthenticationRequest;
-import buy01.ms-auth.models.client.ClientAuthenticationResponse;
-import buy01.ms-auth.models.client.ClientRegistrationRequest;
-import buy01.ms-auth.services.AuthenticationService;
+import buy01.authservice.models.client.ClientAuthenticationRequest;
+import buy01.authservice.models.client.ClientAuthenticationResponse;
+import buy01.authservice.models.client.ClientRegistrationRequest;
+import buy01.authservice.services.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 

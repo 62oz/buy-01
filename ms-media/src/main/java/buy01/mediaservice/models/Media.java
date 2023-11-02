@@ -1,4 +1,4 @@
-package buy01.ms-media.models;
+package buy01.mediaservice.models;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 

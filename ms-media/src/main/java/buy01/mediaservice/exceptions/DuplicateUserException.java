@@ -1,4 +1,4 @@
-package buy01.ms-media.exceptions;
+package buy01.mediaservice.exceptions;
 
 public class DuplicateUserException extends RuntimeException {
     public DuplicateUserException(String message) {

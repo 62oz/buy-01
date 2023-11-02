@@ -11,9 +11,9 @@
 
 
 	<groupId>buy01</groupId>
-	<artifactId>ms-auth</artifactId>
+	<artifactId>authservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-auth</name>
+	<name>authservice</name>
 
 	<properties>
 		<java.version>17</java.version>

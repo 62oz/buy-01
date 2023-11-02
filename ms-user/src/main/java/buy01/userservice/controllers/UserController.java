@@ -1,4 +1,4 @@
-package buy01.ms-user.controllers;
+package buy01.userservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.*;
 import java.security.Principal;
 import java.util.List;
 
-import buy01.ms-user.models.User;
-import buy01.ms-user.models.client.ClientResponse;
-import buy01.ms-user.services.UserService;
+import buy01.userservice.models.User;
+import buy01.userservice.models.client.ClientResponse;
+import buy01.userservice.services.UserService;
 import jakarta.validation.Valid;
 
 

@@ -1,4 +1,4 @@
-package buy01.ms-auth;
+package buy01.authservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

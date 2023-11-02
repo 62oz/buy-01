@@ -1,4 +1,4 @@
-package buy01.ms-product.exceptions;
+package buy01.productservice.exceptions;
 
 // ResourceNotFoundException.java
 public class ResourceNotFoundException extends RuntimeException {

@@ -16,10 +16,10 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>ms-user</module>
-    <module>ms-product</module>
-    <module>ms-media</module>
-    <module>ms-auth</module>
+    <module>userservice</module>
+    <module>productservice</module>
+    <module>mediaservice</module>
+    <module>authservice</module>
   </modules>
 
   <dependencyManagement>

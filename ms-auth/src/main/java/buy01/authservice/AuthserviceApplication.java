@@ -1,4 +1,4 @@
-package buy01.ms-auth;
+package buy01.authservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

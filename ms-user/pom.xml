@@ -11,9 +11,9 @@
 
 
 	<groupId>buy01</groupId>
-	<artifactId>ms-user</artifactId>
+	<artifactId>userservice</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-user</name>
+	<name>userservice</name>
 
 	<properties>
 		<java.version>17</java.version>

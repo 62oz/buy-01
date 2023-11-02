@@ -1,4 +1,4 @@
-package buy01.ms-media.config;
+package buy01.mediaservice.config;
 
 import java.security.Key;
 import java.util.Date;
@@ -8,7 +8,7 @@ import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-media.exceptions.InvalidJwtTokenException;
+import buy01.mediaservice.exceptions.InvalidJwtTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

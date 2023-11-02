@@ -1,4 +1,4 @@
-package buy01.ms-product.enums;
+package buy01.productservice.enums;
 
 public enum Role {
     ROLE_SELLER,

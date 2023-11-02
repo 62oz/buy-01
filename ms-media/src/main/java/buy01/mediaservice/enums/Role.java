@@ -1,4 +1,4 @@
-package buy01.ms-media.enums;
+package buy01.mediaservice.enums;
 
 public enum Role {
     ROLE_SELLER,

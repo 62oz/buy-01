@@ -1,4 +1,4 @@
-package buy01.ms-media.exceptions;
+package buy01.mediaservice.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

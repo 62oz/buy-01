@@ -1,12 +1,12 @@
-package buy01.ms-product.controllers;
+package buy01.productservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
-import buy01.ms-product.models.Product;
-import buy01.ms-product.models.ProductResponse;
-import buy01.ms-product.services.ProductService;
+import buy01.productservice.models.Product;
+import buy01.productservice.models.ProductResponse;
+import buy01.productservice.services.ProductService;
 
 import jakarta.validation.Valid;
 

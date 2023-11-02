@@ -1,4 +1,4 @@
-package buy01.ms-user.enums;
+package buy01.userservice.enums;
 
 public enum Role {
     ROLE_SELLER,

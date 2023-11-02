@@ -1,4 +1,4 @@
-package buy01.ms-user.exceptions;
+package buy01.userservice.exceptions;
 
 import org.springframework.security.core.AuthenticationException;
 

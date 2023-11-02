@@ -1,4 +1,4 @@
-package buy01.ms-user.config;
+package buy01.userservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

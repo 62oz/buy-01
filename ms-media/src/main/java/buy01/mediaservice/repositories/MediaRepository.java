@@ -1,9 +1,9 @@
-package buy01.ms-media.repositories;
+package buy01.mediaservice.repositories;
 
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import buy01.ms-media.models.Media;
+import buy01.mediaservice.models.Media;
 
 import java.util.List;
 

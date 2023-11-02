@@ -1,4 +1,4 @@
-package buy01.ms-product;
+package buy01.productservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

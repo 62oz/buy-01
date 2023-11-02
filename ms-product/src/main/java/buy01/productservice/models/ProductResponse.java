@@ -1,4 +1,4 @@
-package buy01.ms-product.models;
+package buy01.productservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

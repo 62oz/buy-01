@@ -1,4 +1,4 @@
-package buy01.ms-user.services;
+package buy01.userservice.services;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -13,12 +13,12 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-user.enums.Role;
-import buy01.ms-user.exceptions.ResourceNotFoundException;
-import buy01.ms-user.models.User;
-import buy01.ms-user.models.client.ClientResponse;
-import buy01.ms-user.models.client.ClientResponse.ClientResponseBuilder;
-import buy01.ms-user.repository.UserRepository;
+import buy01.userservice.enums.Role;
+import buy01.userservice.exceptions.ResourceNotFoundException;
+import buy01.userservice.models.User;
+import buy01.userservice.models.client.ClientResponse;
+import buy01.userservice.models.client.ClientResponse.ClientResponseBuilder;
+import buy01.userservice.repository.UserRepository;
 
 import jakarta.annotation.PostConstruct;
 

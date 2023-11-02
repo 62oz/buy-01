@@ -1,4 +1,4 @@
-package buy01.ms-user.services;
+package buy01.userservice.services;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.kafka.annotation.KafkaListener;
@@ -6,12 +6,12 @@ import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-user.models.User;
-import buy01.ms-user.models.auth.AuthAuthenticationResponse;
-import buy01.ms-user.models.auth.AuthRegistrationRequest;
-import buy01.ms-user.models.auth.AuthRegistrationResponse;
-import buy01.ms-user.models.client.ClientAuthenticationRequest;
-import buy01.ms-user.repository.UserRepository;
+import buy01.userservice.models.User;
+import buy01.userservice.models.auth.AuthAuthenticationResponse;
+import buy01.userservice.models.auth.AuthRegistrationRequest;
+import buy01.userservice.models.auth.AuthRegistrationResponse;
+import buy01.userservice.models.client.ClientAuthenticationRequest;
+import buy01.userservice.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 
 @Service

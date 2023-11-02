@@ -1,4 +1,4 @@
-package buy01.ms-user;
+package buy01.userservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

@@ -1,4 +1,4 @@
-package buy01.ms-product;
+package buy01.productservice;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;

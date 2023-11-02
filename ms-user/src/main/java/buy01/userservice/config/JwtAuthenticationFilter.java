@@ -1,4 +1,4 @@
-package buy01.ms-user.config;
+package buy01.userservice.config;
 
 import java.io.IOException;
 
@@ -12,7 +12,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import com.mongodb.lang.NonNull;
 
-import buy01.ms-user.exceptions.InvalidJwtTokenException;
+import buy01.userservice.exceptions.InvalidJwtTokenException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

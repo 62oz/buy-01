@@ -1,4 +1,4 @@
-package buy01.ms-auth.config;
+package buy01.authservice.config;
 
 import java.security.Key;
 import java.util.Date;
@@ -9,9 +9,9 @@ import java.util.Map;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.ms-auth.exceptions.InvalidJwtTokenException;
-import buy01.ms-auth.models.user.UserAuthenticationResponse;
-import buy01.ms-auth.models.user.UserRegistrationRequest;
+import buy01.authservice.exceptions.InvalidJwtTokenException;
+import buy01.authservice.models.user.UserAuthenticationResponse;
+import buy01.authservice.models.user.UserRegistrationRequest;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

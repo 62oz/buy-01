@@ -1,4 +1,4 @@
-package buy01.ms-product.config;
+package buy01.productservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

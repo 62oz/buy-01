@@ -1,4 +1,4 @@
-package buy01.ms-product.services;
+package buy01.productservice.services;
 
 import java.nio.file.AccessDeniedException;
 import java.util.List;
@@ -9,12 +9,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 
-import buy01.ms-product.config.JwtService;
-import buy01.ms-product.enums.Role;
-import buy01.ms-product.exceptions.ResourceNotFoundException;
-import buy01.ms-product.models.Product;
-import buy01.ms-product.models.ProductResponse;
-import buy01.ms-product.repositories.ProductRepository;
+import buy01.productservice.config.JwtService;
+import buy01.productservice.enums.Role;
+import buy01.productservice.exceptions.ResourceNotFoundException;
+import buy01.productservice.models.Product;
+import buy01.productservice.models.ProductResponse;
+import buy01.productservice.repositories.ProductRepository;
 
 @Service
 public class ProductService {

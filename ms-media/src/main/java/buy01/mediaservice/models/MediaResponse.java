@@ -1,4 +1,4 @@
-package buy01.ms-media.models;
+package buy01.mediaservice.models;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

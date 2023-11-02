@@ -1,8 +1,8 @@
-package buy01.ms-product.repositories;
+package buy01.productservice.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import buy01.ms-product.models.Product;
+import buy01.productservice.models.Product;
 
 import java.util.List;
 

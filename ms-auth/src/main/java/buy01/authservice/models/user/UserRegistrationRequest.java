@@ -1,6 +1,6 @@
-package buy01.ms-auth.models.user;
+package buy01.authservice.models.user;
 
-import buy01.ms-auth.enums.Role;
+import buy01.authservice.enums.Role;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

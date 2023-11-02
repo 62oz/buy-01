@@ -1,4 +1,4 @@
-package buy01.ms-user.exceptions;
+package buy01.userservice.exceptions;
 
 public class DuplicateUserException extends RuntimeException {
     public DuplicateUserException(String message) {

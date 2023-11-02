@@ -1,4 +1,4 @@
-package buy01.ms-auth.config;
+package buy01.authservice.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

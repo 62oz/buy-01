@@ -1,4 +1,4 @@
-package buy01.ms-media.controllers;
+package buy01.mediaservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
