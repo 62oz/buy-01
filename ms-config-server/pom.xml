@@ -9,20 +9,20 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>buy01</groupId>
-	<artifactId>ms-eureka-server</artifactId>
+	<artifactId>ms-config-server</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>ms-eureka-server</name>
+	<name>ms-config-server</name>
 	<description>Demo project for Spring Boot</description>
 	<properties>
 		<java.version>17</java.version>
 	</properties>
 	<dependencies>
-	        <!-- Spring Cloud Dependencies -->
+		<!-- Spring Cloud Dependencies -->
         <dependency>
-            <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
-            <version>4.0.3</version>
-        </dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-config-server</artifactId>
+			<version>4.0.4</version>
+		</dependency>
 
 		<!-- Spring Boot Dependencies -->
 		<dependency>
