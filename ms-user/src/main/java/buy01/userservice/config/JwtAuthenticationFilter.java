@@ -77,7 +77,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             if (!request.getRequestURI().equals("/products/")) {
                 response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
                 response.setContentType("application/json");
-                response.getWriter().write("{\"error\": \"Unknown error.\"}");
+                response.getWriter().write("{\"error\": \"Unknown JWT error. Please check your token.\"}");
                 response.getWriter().flush();
             } else {
                 filterChain.doFilter(request, response);
