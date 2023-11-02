@@ -51,7 +51,7 @@ public class MediaService {
         return mediaResponses;
     }
 
-    public Media createMedia(Media media, String authenticatedUserName, String productId) throws AccessDeniedException {
+    public Media createMedia(Media media, String authenticatedUserName) throws AccessDeniedException {
         String token = ((ServletRequestAttributes) RequestContextHolder.currentRequestAttributes()).getRequest().getHeader("Authorization");
         if (token != null && token.startsWith("Bearer ")) {
             token = token.substring(7);
@@ -66,7 +66,6 @@ public class MediaService {
         }
 
         media.setUserId(userId);
-        media.setProductId(productId);
         return mediaRepository.save(media);
     }
 

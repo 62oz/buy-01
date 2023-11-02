@@ -12,4 +12,5 @@ public class ClientMediaRequest {
     @NotNull(message = "Image path cannot be null")
     @NotBlank(message = "Image path cannot be blank")
     private String imagePath;
+    private String productId;
 }
