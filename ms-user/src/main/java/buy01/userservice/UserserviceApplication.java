@@ -1,4 +1,4 @@
-package buy01.ms-users;
+package buy01.userservice;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

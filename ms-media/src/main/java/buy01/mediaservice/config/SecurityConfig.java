@@ -9,8 +9,6 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
-import buy01.mediaservice.enums.Role;
-
 import lombok.RequiredArgsConstructor;
 
 @Configuration
@@ -23,19 +21,18 @@ public class SecurityConfig {
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http
-            .authorizeHttpRequests(authorizeRequests ->
-                authorizeRequests
-                    .requestMatchers("/", "/error").permitAll()
-                    .anyRequest().authenticated()
-            )
-            .sessionManagement(sessionManagement ->
-                sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
-            .authenticationProvider(authenticationProvider)
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class);
+        return http
+                .csrf(csrf -> csrf.disable())
+                .authorizeHttpRequests(authorizeRequests ->
+                    authorizeRequests
+                        .requestMatchers("/", "/error").permitAll()
+                        .anyRequest().authenticated()
+                )
+                .sessionManagement(sessionManagement ->
+                    sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .authenticationProvider(authenticationProvider)
+                .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
+                .build();
 
-            http.csrf().disable();
-
-        return http.build();
     }
 }
