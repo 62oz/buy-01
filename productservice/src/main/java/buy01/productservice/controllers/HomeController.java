@@ -13,6 +13,6 @@ import lombok.RequiredArgsConstructor;
 public class HomeController {
     @GetMapping("/")
     public ResponseEntity<String> greet() {
-        return ResponseEntity.ok("Welcome to buy01 :)");
+        return ResponseEntity.ok("Welcome to buy01 product service :)");
     }
 }

@@ -1,4 +1,4 @@
-package buy01.userservice.controllers;
+package buy01.mediaservice.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,6 +13,6 @@ import lombok.RequiredArgsConstructor;
 public class HomeController {
     @GetMapping("/")
     public ResponseEntity<String> greet() {
-        return ResponseEntity.ok("Welcome to buy01 user service :)");
+        return ResponseEntity.ok("Welcome to buy01 media service :)");
     }
 }

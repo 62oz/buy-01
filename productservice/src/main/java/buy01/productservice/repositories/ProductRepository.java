@@ -2,7 +2,7 @@ package buy01.productservice.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 
-import buy01.productservice.domains.Product;
+import buy01.productservice.models.Product;
 
 import java.util.List;
 
