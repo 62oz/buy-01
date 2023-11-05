@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.*;
 import buy01.userservice.models.RegisterRequest;
 import buy01.userservice.models.User;
 import buy01.userservice.repository.UserRepository;
-import buy01.userservice.services.UserService;
 import jakarta.validation.Valid;
 
 
@@ -16,8 +15,8 @@ import jakarta.validation.Valid;
 @RequestMapping("api/user")
 public class UserController {
 
-    @Autowired
-    private UserService userService;
+    /* @Autowired
+    private UserService userService; */
     @Autowired
     private UserRepository userRepository;
 

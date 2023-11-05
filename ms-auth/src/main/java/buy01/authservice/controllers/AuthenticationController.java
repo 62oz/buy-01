@@ -9,8 +9,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.netflix.discovery.converters.Auto;
-
 import buy01.authservice.exceptions.AuthenticationException;
 import buy01.authservice.models.AuthResponse;
 import buy01.authservice.models.LoginRequest;
