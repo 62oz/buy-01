@@ -1,38 +1,51 @@
 package buy01.authservice.services;
 
-import java.security.Key;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.security.KeyFactory;
+import java.security.KeyPair;
+import java.security.NoSuchAlgorithmException;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.security.spec.InvalidKeySpecException;
+import java.security.spec.PKCS8EncodedKeySpec;
+import java.security.spec.X509EncodedKeySpec;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.function.Function;
 import java.util.Map;
 
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
-import buy01.authservice.exceptions.InvalidJwtTokenException;
 import buy01.authservice.models.Account;
-import io.jsonwebtoken.Claims;
+import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.io.Decoders;
-import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtService {
 
-    private static final String SECRET_KEY = "9e4ac61feadc39c7494c7db0aa739c8e0935b171e48ab4a9b443fc76c2df123d";
+    private static final String PRIVATE_KEY_PATH = "./private_key.pem";
+    private static final String PUBLIC_KEY_PATH = "./public_key.pem";
+    private KeyPair keyPair;
 
-    public String extractUsername(String token) {
+    @PostConstruct
+    public void init() {
         try {
-            return extractClaim(token, Claims::getSubject);
-        } catch (io.jsonwebtoken.JwtException | IllegalArgumentException e) {
-            throw new InvalidJwtTokenException("Invalid JWT token.");
-        }
-    }
+            byte[] privateKeyBytes = Files.readAllBytes(Paths.get(PRIVATE_KEY_PATH));
+            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
+            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
+            byte[] publicKeyBytes = Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH));
+            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
+            PublicKey publicKey = keyFactory.generatePublic(x509KeySpec);
+
+            keyPair = new KeyPair(publicKey, privateKey);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new IllegalStateException("Could not load keys", e);
+        }
     }
 
     public String generateToken(Account account) {
@@ -47,35 +60,29 @@ public class JwtService {
             .setSubject(account.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
+            .signWith(keyPair.getPrivate(), SignatureAlgorithm.RS256)
             .compact();
     }
 
 
-    public boolean isTokenValid(String token, UserDetails userDetails) {
-        final String username = extractUsername(token);
-        return username.equals(userDetails.getUsername()) && !isTokenExpired(token);
+    public boolean isTokenValid(String token) {
+        try {
+            Jwts.parserBuilder()
+                .setSigningKey(keyPair.getPublic())
+                .build()
+                .parseClaimsJws(token);
+            return true;
+        } catch (JwtException | IllegalArgumentException e) {
+            return false;
+        }
     }
 
-    private boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
-
-    private Claims extractAllClaims(String token) {
-        return Jwts
-        .parserBuilder()
-        .setSigningKey(getSigningKey())
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
-    }
-
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+    public String extractUsername(String token) {
+        return Jwts.parserBuilder()
+            .setSigningKey(keyPair.getPublic())
+            .build()
+            .parseClaimsJws(token)
+            .getBody()
+            .getSubject();
     }
 }

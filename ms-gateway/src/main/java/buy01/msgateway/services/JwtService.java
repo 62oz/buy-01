@@ -1,5 +1,8 @@
 @Service
 public class JwtService {
+    private static final String PUBLIC_KEY_PATH = "./public_key.pem";
+    private KeyPair keyPair;
+
     public List<GrantedAuthority> extractAuthorities(String jwt) {
         Claims claims = extractAllClaims(jwt);
         Role role = claims.get("role", Role.class);
@@ -23,16 +26,23 @@ public class JwtService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts
-        .parserBuilder()
-        .setSigningKey(getSigningKey())
-        .build()
-        .parseClaimsJws(token)
-        .getBody();
+        return Jwts.parserBuilder()
+            .setSigningKey(keyPair.getPublic())
+            .build()
+            .parseClaimsJws(token)
+            .getBody();
     }
 
-    private Key getSigningKey() {
-        byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
-        return Keys.hmacShaKeyFor(keyBytes);
+    @PostConstruct
+    public void init() {
+        try {
+            byte[] publicKeyBytes = Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH));
+            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
+            PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(x509KeySpec);
+
+            keyPair = new KeyPair(publicKey, null);
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+            throw new IllegalStateException("Could not load keys", e);
+        }
     }
 }
