@@ -55,12 +55,26 @@ public class GlobalExceptionHandler {
     }
 
     @ExceptionHandler(AuthenticationException.class)
+    @ResponseStatus(HttpStatus.UNAUTHORIZED)
     public ResponseEntity<String> handleCustomAuthenticationException(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 
     @ExceptionHandler(ResourceNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
     public ResponseEntity<Object> handleResourceNotFoundException(ResourceNotFoundException ex, WebRequest request) {
+        Map<String, Object> responseBody = new HashMap<>();
+        responseBody.put("timestamp", new Date());
+        responseBody.put("message", ex.getMessage());
+        responseBody.put("status", HttpStatus.NOT_FOUND.value());
+        responseBody.put("error", "Not Found");
+
+        return new ResponseEntity<>(responseBody, HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(UsernameNotFoundException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity<Object> handleUserNotFoundException(UsernameNotFoundException ex, WebRequest request) {
         Map<String, Object> responseBody = new HashMap<>();
         responseBody.put("timestamp", new Date());
         responseBody.put("message", ex.getMessage());

@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import buy01.msgateway.exceptions.AuthenticationException;
-import buy01.msgateway.models.AuthResponse;
-import buy01.msgateway.models.LoginRequest;
-import buy01.msgateway.models.RegisterRequest;
+import buy01.msgateway.models.auth.AuthResponse;
+import buy01.msgateway.models.auth.LoginRequest;
+import buy01.msgateway.models.auth.RegisterRequest;
 import lombok.RequiredArgsConstructor;
 
 @Service

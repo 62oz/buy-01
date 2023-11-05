@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import buy01.msgateway.exceptions.AuthenticationException;
-import buy01.msgateway.models.AuthResponse;
-import buy01.msgateway.models.LoginRequest;
-import buy01.msgateway.models.RegisterRequest;
+import buy01.msgateway.models.auth.AuthResponse;
+import buy01.msgateway.models.auth.LoginRequest;
+import buy01.msgateway.models.auth.RegisterRequest;
 import buy01.msgateway.services.AuthServiceClient;
 import buy01.msgateway.services.JwtService;
 import buy01.msgateway.services.SecurityContextService;

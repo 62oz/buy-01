@@ -1,4 +1,4 @@
-package buy01.msgateway.models;
+package buy01.msgateway.models.auth;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
