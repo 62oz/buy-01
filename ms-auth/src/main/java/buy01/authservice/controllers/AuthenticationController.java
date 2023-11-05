@@ -55,10 +55,10 @@ public class AuthenticationController {
     }
 
     @PostMapping("/validateToken")
-    public ResponseEntity<Void> validateToken(@RequestBody String token) {
+    public ResponseEntity<String> validateToken(@RequestBody String token) {
         try {
-            jswtService.validateToken(token);
-            return ResponseEntity.ok().build();
+            String newToken = jswtService.validateToken(token);
+            return ResponseEntity.ok(newToken);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

@@ -28,7 +28,7 @@ public class JwtFilter extends OncePerRequestFilter {
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // User not connected yet
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                authServiceClient.validateToken(jtw)
+                String newToken = authServiceClient.validateToken(jtw);
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
@@ -38,6 +38,8 @@ public class JwtFilter extends OncePerRequestFilter {
                     new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
+                // Update client token
+                response.setHeader("Authorization", "Bearer " + newToken);
             } else {
                 throw new InvalidJwtTokenException();
             }

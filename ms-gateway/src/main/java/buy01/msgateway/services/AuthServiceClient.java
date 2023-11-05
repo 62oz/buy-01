@@ -33,14 +33,16 @@ public class AuthServiceClient {
         }
     }
 
-    public void validateToken(String token) {
+    public String validateToken(String token) {
         ResponseEntity<Void> response = restTemplate.postForEntity(
             "http://ms-auth/api/auth/validateToken",
             token,
             Boolean.class);
 
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new AuthenticationException("Invalid token.");
+        if (response.getStatusCode() == HttpStatus.OK) {
+            return response.getBody();
+        } else {
+            throw new AuthenticationException("Token validation failed.");
         }
     }
 }

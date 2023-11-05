@@ -15,9 +15,11 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import buy01.authservice.models.Account;
+import buy01.authservice.repositories.AccountRepository;
 import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -25,6 +27,13 @@ import jakarta.annotation.PostConstruct;
 
 @Service
 public class JwtService {
+
+    @Autowired
+    private final AccountRepository accountRepository;
+
+    public JwtService(AccountRepository accountRepository) {
+        this.accountRepository = accountRepository;
+    }
 
     private static final String PRIVATE_KEY_PATH = "./private_key.pem";
     private static final String PUBLIC_KEY_PATH = "./public_key.pem";
@@ -72,13 +81,20 @@ public class JwtService {
         }
     }
 
-    public Boolean validateToken(String jwt) {
+    public String validateToken(String jwt) {
         try {
-            Jwts.parserBuilder().setSigningKey(keyPair.getPublic()).build().parseClaimsJws(jwt);
-
-            return true;
+            String username = extractUsername(jwt);
+            Account account = accountRepository.findByUsername(username).get();
+            if (!account.getToken().equals(jwt)) {
+                throw new JwtException("Invalid JWT. Please check your token.");
+            }
+            // Update token
+            String newToken = generateToken(account);
+            account.setToken(newToken);
+            accountRepository.save(account);
+            return newToken;
         } catch (JwtException e) {
-            return false;
+            throw new JwtException("Invalid JWT. Please check your token.");
         }
     }
 }
