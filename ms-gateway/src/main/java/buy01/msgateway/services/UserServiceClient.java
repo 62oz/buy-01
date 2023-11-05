@@ -6,14 +6,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import buy01.msgateway.models.RegisterRequest;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class UserServiceClient {
     private final RestTemplate restTemplate;
-
-    public UserServiceClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     public void createUser(String userId, RegisterRequest registerRequest) {
         ResponseEntity<Void> response = restTemplate.postForEntity(

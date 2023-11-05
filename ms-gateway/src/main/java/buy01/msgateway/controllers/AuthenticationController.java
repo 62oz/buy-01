@@ -14,26 +14,18 @@ import buy01.msgateway.services.AuthServiceClient;
 import buy01.msgateway.services.JwtService;
 import buy01.msgateway.services.SecurityContextService;
 import buy01.msgateway.services.UserServiceClient;
+import lombok.RequiredArgsConstructor;
 
 import java.util.Map;
 import java.util.HashMap;
 
 @RestController
+@RequiredArgsConstructor
 public class AuthenticationController {
 
     private final AuthServiceClient authServiceClient;
     private final SecurityContextService securityContextService;
     private final JwtService jwtService;
-
-    public AuthenticationController(JwtService jwtService,
-                                    SecurityContextService securityContextService,
-                                    AuthServiceClient authServiceClient,
-                                    UserServiceClient userServiceClient)
-    {
-        this.jwtService = jwtService;
-        this.securityContextService = securityContextService;
-        this.authServiceClient = authServiceClient;
-    }
 
     @PostMapping("/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, UserServiceClient userServiceClient) {

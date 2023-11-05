@@ -6,13 +6,12 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public class SecurityContextService {
 
     private final JwtService jwtService;
-
-    public SecurityContextService(JwtService jwtService) {
-        this.jwtService = jwtService;
-    }
 
     public void setAuthentication(String jwt) {
         String username = jwtService.extractUsername(jwt);

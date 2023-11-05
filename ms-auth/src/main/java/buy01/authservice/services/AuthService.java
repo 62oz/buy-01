@@ -16,7 +16,9 @@ import buy01.authservice.exceptions.AuthenticationException;
 import buy01.authservice.models.Account;
 import buy01.authservice.repositories.AccountRepository;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 
+@RequiredArgsConstructor
 public class AuthService {
     @Value("${admin.default.name}")
     private String adminName;
@@ -33,12 +35,6 @@ public class AuthService {
     private final AccountRepository accountRepository;
     @Autowired
     private final JwtService jwtService;
-
-    public AuthService(PasswordEncoder passwordEncoder, AccountRepository accountRepository, JwtService jwtService) {
-        this.passwordEncoder = passwordEncoder;
-        this.accountRepository = accountRepository;
-        this.jwtService = jwtService;
-    }
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
         Optional<Account> accountOptional = accountRepository.findByUsername(loginRequest.getUsername());

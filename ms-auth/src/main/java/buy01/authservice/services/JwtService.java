@@ -24,16 +24,14 @@ import io.jsonwebtoken.JwtException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import jakarta.annotation.PostConstruct;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class JwtService {
 
     @Autowired
     private final AccountRepository accountRepository;
-
-    public JwtService(AccountRepository accountRepository) {
-        this.accountRepository = accountRepository;
-    }
 
     private static final String PRIVATE_KEY_PATH = "./private_key.pem";
     private static final String PUBLIC_KEY_PATH = "./public_key.pem";

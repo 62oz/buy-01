@@ -8,8 +8,5 @@ public class UserService {
 
 /*     @Autowired
     private final UserRepository userRepository;
-
-    UserService(UserRepository userRepository) {
-        this.userRepository = userRepository;
-    } */
+    */
 }

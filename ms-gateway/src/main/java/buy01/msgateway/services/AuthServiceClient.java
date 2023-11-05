@@ -9,15 +9,13 @@ import buy01.msgateway.exceptions.AuthenticationException;
 import buy01.msgateway.models.AuthResponse;
 import buy01.msgateway.models.LoginRequest;
 import buy01.msgateway.models.RegisterRequest;
+import lombok.RequiredArgsConstructor;
 
 @Service
+@RequiredArgsConstructor
 public class AuthServiceClient {
 
     private final RestTemplate restTemplate;
-
-    public AuthServiceClient(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
-    }
 
     public AuthResponse authenticate(LoginRequest loginRequest) {
         ResponseEntity<AuthResponse> response = restTemplate.postForEntity(
