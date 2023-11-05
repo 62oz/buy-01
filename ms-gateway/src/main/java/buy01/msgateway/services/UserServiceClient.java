@@ -10,7 +10,7 @@ public class UserServiceClient {
 
     public void createUser(String userId, RegisterRequest registerRequest) {
         ResponseEntity<Void> response = restTemplate.postForEntity(
-            "http://ms-user/api/user/createProile/" + userId,
+            "http://ms-user/api/user/createProfile/" + userId,
             registerRequest,
             Void.class);
     }

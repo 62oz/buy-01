@@ -5,6 +5,7 @@ import java.util.Base64;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import buy01.authservice.models.AuthResponse;
@@ -14,8 +15,17 @@ import buy01.authservice.enums.Role;
 import buy01.authservice.exceptions.AuthenticationException;
 import buy01.authservice.models.Account;
 import buy01.authservice.repositories.AccountRepository;
+import jakarta.annotation.PostConstruct;
 
 public class AuthService {
+    @Value("${admin.default.name}")
+    private String adminName;
+
+    @Value("${admin.default.email}")
+    private String adminEmail;
+
+    @Value("${admin.default.password}")
+    private String adminPassword;
 
     @Autowired
     private final PasswordEncoder passwordEncoder;
@@ -71,5 +81,19 @@ public class AuthService {
         byte[] saltBytes = new byte[16];
         random.nextBytes(saltBytes);
         return Base64.getEncoder().encodeToString(saltBytes);
+    }
+
+    @PostConstruct
+    public void initDefaultAdmin() {
+        // Check if the default admin exists in the DB
+        if (!accountRepository.existsByEmail(adminEmail)) {
+            Account admin = Account.builder()
+                    .username(adminName)
+                    .email(adminEmail)
+                    .password(passwordEncoder.encode(adminPassword))
+                    .role(Role.ROLE_ADMIN)
+                    .build();
+            accountRepository.save(admin);
+        }
     }
 }

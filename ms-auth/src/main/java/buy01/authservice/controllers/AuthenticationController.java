@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 import buy01.authservice.exceptions.AuthenticationException;
 import buy01.authservice.models.AuthResponse;
 import buy01.authservice.models.LoginRequest;
+import buy01.authservice.models.RegisterRequest;
 import buy01.authservice.services.AuthService;
 import lombok.RequiredArgsConstructor;
 
