@@ -9,7 +9,7 @@ public class AuthServiceClient {
 
     public AuthResponse authenticate(LoginRequest loginRequest) {
         ResponseEntity<AuthResponse> response = restTemplate.postForEntity(
-            "http://ms-auth/api/auth/authenticate",
+            "http://ms-auth/api/auth/login",
             loginRequest,
             AuthResponse.class);
 
@@ -30,6 +30,17 @@ public class AuthServiceClient {
             return response.getBody();
         } else {
             throw new AuthenticationException("Registration failed.");
+        }
+    }
+
+    public void validateToken(String token) {
+        ResponseEntity<Void> response = restTemplate.postForEntity(
+            "http://ms-auth/api/auth/validateToken",
+            token,
+            Boolean.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Invalid token.");
         }
     }
 }

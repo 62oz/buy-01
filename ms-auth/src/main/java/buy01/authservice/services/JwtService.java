@@ -64,25 +64,21 @@ public class JwtService {
             .compact();
     }
 
-
-    public boolean isTokenValid(String token) {
+    public String extractUsername(String jwt) throws JwtException {
         try {
-            Jwts.parserBuilder()
-                .setSigningKey(keyPair.getPublic())
-                .build()
-                .parseClaimsJws(token);
-            return true;
-        } catch (JwtException | IllegalArgumentException e) {
-            return false;
+            return Jwts.parserBuilder().setSigningKey(keyPair.getPublic()).build().parseClaimsJws(jwt).getBody().getSubject();
+        } catch (JwtException e) {
+            throw new JwtException("Invalid JWT. Please check your token.");
         }
     }
 
-    public String extractUsername(String token) {
-        return Jwts.parserBuilder()
-            .setSigningKey(keyPair.getPublic())
-            .build()
-            .parseClaimsJws(token)
-            .getBody()
-            .getSubject();
+    public Boolean validateToken(String jwt) {
+        try {
+            Jwts.parserBuilder().setSigningKey(keyPair.getPublic()).build().parseClaimsJws(jwt);
+
+            return true;
+        } catch (JwtException e) {
+            return false;
+        }
     }
 }
