@@ -4,12 +4,15 @@ import java.security.SecureRandom;
 import java.util.Base64;
 import java.util.concurrent.CompletableFuture;
 
+import org.springframework.http.HttpMethod;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import buy01.authservice.config.JwtService;
 import buy01.authservice.enums.Role;
@@ -30,6 +33,7 @@ public class AuthenticationService {
     private final JwtService jwtService;
     private final AuthenticationManager authenticationManager;
     private final KafkaProducerService kafkaProducerService;
+    private final RestTemplate restTemplate;
 
     public ClientAuthenticationResponse register(ClientRegistrationRequest request) throws Exception {
         String salt = generateRandomSalt();
@@ -71,15 +75,22 @@ public class AuthenticationService {
     }
 
     public ClientAuthenticationResponse authenticate(ClientAuthenticationRequest request) throws Exception {
-        UserAuthenticationResponse userDto = kafkaProducerService.getUserByUsername(request.getUsername());
-        UserDetails userDetails = userDto.getUserDetails();
+        ResponseEntity<UserAuthenticationResponse> response = restTemplate.exchange(
+            "http://ms-user/api/users/{username}",
+            HttpMethod.GET,
+            null,
+            UserAuthenticationResponse.class,
+            request.getUsername()
+        );
 
-        String salt = userDto.getSalt();
-        if (salt == null) {
-            salt = "";
+        UserAuthenticationResponse userDto = response.getBody();
+        if (userDto == null) {
+            throw new CustomAuthenticationException("User not found");
         }
 
-        String saltedPassword = salt + request.getPassword();
+        UserDetails userDetails = userDto.getUserDetails();
+        String salt = userDto.getSalt();
+        String saltedPassword = (salt == null ? "" : salt) + request.getPassword();
 
         try {
             authenticationManager.authenticate(
