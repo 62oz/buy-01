@@ -1,22 +1,24 @@
-package buy01.authservice.models.user;
+package buy01.authservice.models;
+
+import org.springframework.data.annotation.Id;
 
 import buy01.authservice.enums.Role;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class UserRegistrationRequest {
-    private String requestId;
+public class Account {
+    @Id
+    private String id;
+    @Id
     private String userId;
     private String username;
     private String email;
     private String password;
     private String salt;
     private Role role;
-    private String avatar;
+    private String token;
 }

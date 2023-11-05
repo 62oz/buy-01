@@ -13,6 +13,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import com.mongodb.lang.NonNull;
 
 import buy01.authservice.exceptions.InvalidJwtTokenException;
+import buy01.authservice.services.JwtService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;

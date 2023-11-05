@@ -1,4 +1,4 @@
-package buy01.authservice.config;
+package buy01.authservice.services;
 
 import java.security.Key;
 import java.util.Date;
@@ -10,8 +10,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import buy01.authservice.exceptions.InvalidJwtTokenException;
-import buy01.authservice.models.user.UserAuthenticationResponse;
-import buy01.authservice.models.user.UserRegistrationRequest;
+import buy01.authservice.models.Account;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -36,35 +35,16 @@ public class JwtService {
         return claimsResolver.apply(claims);
     }
 
-    public String generateToken(UserAuthenticationResponse userDto) {
+    public String generateToken(Account account) {
         Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("role", userDto.getRole().toString());
-        extraClaims.put("avatar", userDto.getAvatar());
-        extraClaims.put("salt", userDto.getSalt());
-        extraClaims.put("id", userDto.getUserId());
+        extraClaims.put("role", account.getRole().toString());
+        extraClaims.put("id", account.getUserId());
+        extraClaims.put("userId", account.getUserId());
 
         return Jwts
             .builder()
             .setClaims(extraClaims)
-            .setSubject(userDto.getUserDetails().getUsername())
-            .setIssuedAt(new Date(System.currentTimeMillis()))
-            .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
-            .signWith(getSigningKey(), SignatureAlgorithm.HS256)
-            .compact();
-    }
-
-
-    public String generateToken(UserRegistrationRequest userDto) {
-        Map<String, Object> extraClaims = new HashMap<>();
-        extraClaims.put("role", userDto.getRole().toString());
-        extraClaims.put("avatar", userDto.getAvatar());
-        extraClaims.put("salt", userDto.getSalt());
-        extraClaims.put("id", userDto.getUserId());
-
-        return Jwts
-            .builder()
-            .setClaims(extraClaims)
-            .setSubject(userDto.getUsername())
+            .setSubject(account.getUsername())
             .setIssuedAt(new Date(System.currentTimeMillis()))
             .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60))
             .signWith(getSigningKey(), SignatureAlgorithm.HS256)
@@ -98,5 +78,4 @@ public class JwtService {
         byte[] keyBytes = Decoders.BASE64.decode(SECRET_KEY);
         return Keys.hmacShaKeyFor(keyBytes);
     }
-
 }

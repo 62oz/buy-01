@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import javax.naming.AuthenticationException;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -52,8 +54,8 @@ public class GlobalExceptionHandler {
         return errorMap;
     }
 
-    @ExceptionHandler(CustomAuthenticationException.class)
-    public ResponseEntity<String> handleCustomAuthenticationException(CustomAuthenticationException ex) {
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleCustomAuthenticationException(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 

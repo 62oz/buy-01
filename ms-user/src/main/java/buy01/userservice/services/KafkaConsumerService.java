@@ -26,7 +26,7 @@ public class KafkaConsumerService {
     @KafkaListener(topics = "user-details-request-topic", groupId = "userservice-group")
     public void handleUserDetailsRequest(ClientAuthenticationRequest request) {
         try {
-            User user = userRepository.findByName(request.getUsername())
+            User user = userRepository.findByUsername(request.getUsername())
                     .orElseThrow(() -> new RuntimeException("User not found"));
 
             UserDetails userDetails = User.builder()

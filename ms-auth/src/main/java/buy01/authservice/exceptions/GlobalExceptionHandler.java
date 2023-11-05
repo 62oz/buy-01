@@ -52,8 +52,8 @@ public class GlobalExceptionHandler {
         return errorMap;
     }
 
-    @ExceptionHandler(CustomAuthenticationException.class)
-    public ResponseEntity<String> handleCustomAuthenticationException(CustomAuthenticationException ex) {
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<String> handleCustomAuthenticationException(AuthenticationException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(ex.getMessage());
     }
 

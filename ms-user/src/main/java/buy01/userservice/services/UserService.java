@@ -1,6 +1,7 @@
 package buy01.userservice.services;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,11 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import buy01.userservice.enums.Role;
+import buy01.userservice.exceptions.AuthenticationException;
 import buy01.userservice.exceptions.ResourceNotFoundException;
+import buy01.userservice.models.LoginRequest;
 import buy01.userservice.models.User;
+import buy01.userservice.models.UserAuthenticationResponse;
 import buy01.userservice.models.client.ClientResponse;
 import buy01.userservice.models.client.ClientResponse.ClientResponseBuilder;
 import buy01.userservice.repository.UserRepository;
@@ -71,6 +75,21 @@ public class UserService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    public UserAuthenticationResponse authenticateUser(LoginRequest loginRequest) {
+        Optional<User> userOptional = userRepository.findByUsername(loginRequest.getUsername());
+        if (userOptional.isPresent() && passwordEncoder.matches(loginRequest.getPassword(), userOptional.get().getPassword())) {
+            User user = userOptional.get();
+            UserAuthenticationResponse userAuthResponse = new UserAuthenticationResponse();
+            userAuthResponse.setUserId(user.getId());
+            userAuthResponse.setUsername(user.getUsername());
+            userAuthResponse.setRole(user.getRole());
+            userAuthResponse.setAvatar(user.getAvatar());
+            return userAuthResponse;
+        } else {
+            throw new AuthenticationException("Invalid username or password");
+        }
+    }
+
     public List<ClientResponse> getAllUsers() {
         List<User> users = userRepository.findAll();
         List<ClientResponse> userResponses = users.stream()
@@ -86,7 +105,7 @@ public class UserService {
     }
 
     public ClientResponse getUserByName(String username) {
-        User user = userRepository.findByName(username).orElseThrow();
+        User user = userRepository.findByUsername(username).orElseThrow();
         return mapToClientResponse(user);
     }
 
@@ -99,7 +118,7 @@ public class UserService {
         User originalUser = userRepository.findById(id)
                     .orElseThrow(() -> new ResourceNotFoundException("User not found for this id :: " + id));
 
-        User authenticatedUser = userRepository.findByName(authenticatedUserName)
+        User authenticatedUser = userRepository.findByUsername(authenticatedUserName)
                                             .orElseThrow(() -> new UsernameNotFoundException("Authenticated user not found in database."));
 
         if (!authenticatedUser.getRole().equals(Role.ROLE_ADMIN)
@@ -160,7 +179,7 @@ public class UserService {
         }
 
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return userRepository.findByName(userDetails.getUsername())
+        return userRepository.findByUsername(userDetails.getUsername())
                             .orElse(null);
     }
 
