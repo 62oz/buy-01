@@ -1,5 +1,23 @@
 package buy01.msgateway.controllers;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RestController;
+
+import buy01.msgateway.exceptions.AuthenticationException;
+import buy01.msgateway.models.AuthResponse;
+import buy01.msgateway.models.LoginRequest;
+import buy01.msgateway.models.RegisterRequest;
+import buy01.msgateway.services.AuthServiceClient;
+import buy01.msgateway.services.JwtService;
+import buy01.msgateway.services.SecurityContextService;
+import buy01.msgateway.services.UserServiceClient;
+
+import java.util.Map;
+import java.util.HashMap;
+
 @RestController
 public class AuthenticationController {
 
@@ -27,7 +45,7 @@ public class AuthenticationController {
 
             securityContextService.setAuthentication(jwt);
 
-            Map<Stirng, Object> responseBody = new HashMap<>();
+            Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("jwt", jwt);
 
             return ResponseEntity.ok(responseBody);
@@ -47,7 +65,7 @@ public class AuthenticationController {
 
             securityContextService.setAuthentication(jwt);
 
-            Map<Stirng, Object> responseBody = new HashMap<>();
+            Map<String, Object> responseBody = new HashMap<>();
             responseBody.put("jwt", jwt);
 
             return ResponseEntity.ok(responseBody);

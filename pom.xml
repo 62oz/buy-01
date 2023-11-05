@@ -22,6 +22,7 @@
     <module>ms-auth</module>
     <module>ms-eureka-server</module>
     <module>ms-config-server</module>
+    <module>ms-gateway</module>
   </modules>
 
   <dependencyManagement>

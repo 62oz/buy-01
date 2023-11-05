@@ -1,3 +1,15 @@
+package buy01.msgateway.services;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
+
+import buy01.msgateway.exceptions.AuthenticationException;
+import buy01.msgateway.models.AuthResponse;
+import buy01.msgateway.models.LoginRequest;
+import buy01.msgateway.models.RegisterRequest;
+
 @Service
 public class AuthServiceClient {
 
@@ -34,10 +46,10 @@ public class AuthServiceClient {
     }
 
     public String validateToken(String token) {
-        ResponseEntity<Void> response = restTemplate.postForEntity(
+        ResponseEntity<String> response = restTemplate.postForEntity(
             "http://ms-auth/api/auth/validateToken",
             token,
-            Boolean.class);
+            String.class);
 
         if (response.getStatusCode() == HttpStatus.OK) {
             return response.getBody();
