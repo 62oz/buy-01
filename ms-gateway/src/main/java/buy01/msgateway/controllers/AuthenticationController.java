@@ -22,7 +22,6 @@ import java.util.HashMap;
 public class AuthenticationController {
 
     private final AuthServiceClient authServiceClient;
-    private final UserServiceClient userServiceClient;
     private final SecurityContextService securityContextService;
     private final JwtService jwtService;
 
@@ -34,7 +33,6 @@ public class AuthenticationController {
         this.jwtService = jwtService;
         this.securityContextService = securityContextService;
         this.authServiceClient = authServiceClient;
-        this.userServiceClient = userServiceClient;
     }
 
     @PostMapping("/login")

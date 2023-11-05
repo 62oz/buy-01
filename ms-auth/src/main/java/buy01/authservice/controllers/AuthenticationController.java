@@ -14,7 +14,6 @@ import buy01.authservice.models.AuthResponse;
 import buy01.authservice.models.LoginRequest;
 import buy01.authservice.models.RegisterRequest;
 import buy01.authservice.services.AuthService;
-import buy01.authservice.services.JwtService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -24,8 +23,6 @@ public class AuthenticationController {
 
     @Autowired
     private final AuthService authService;
-    @Autowired
-    private final JwtService jswtService;
 
     @GetMapping("/")
     public ResponseEntity<String> greet() {
@@ -52,11 +49,11 @@ public class AuthenticationController {
         }
     }
 
-    @PostMapping("/validateToken")
-    public ResponseEntity<String> validateToken(@RequestBody String token) {
+    @PostMapping("/account-exists")
+    public ResponseEntity<Void> accountExists(@RequestBody String username) {
         try {
-            String newToken = jswtService.validateToken(token);
-            return ResponseEntity.ok(newToken);
+            authService.accountExists(username);
+            return ResponseEntity.ok().build();
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }

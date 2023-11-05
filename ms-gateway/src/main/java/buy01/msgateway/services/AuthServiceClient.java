@@ -45,16 +45,13 @@ public class AuthServiceClient {
         }
     }
 
-    public String validateToken(String token) {
-        ResponseEntity<String> response = restTemplate.postForEntity(
-            "http://ms-auth/api/auth/validateToken",
-            token,
-            String.class);
+    public void accountExists(String username) {
+        ResponseEntity<Boolean> response = restTemplate.getForEntity(
+            "http://ms-auth/api/auth/account-exists/" + username,
+            Boolean.class);
 
-        if (response.getStatusCode() == HttpStatus.OK) {
-            return response.getBody();
-        } else {
-            throw new AuthenticationException("Token validation failed.");
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("User does not exist.");
         }
     }
 }

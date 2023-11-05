@@ -47,11 +47,11 @@ public class JwtFilter extends OncePerRequestFilter {
             }
             jtw = authorizationHeader.substring(7);
             username = jwtService.extractUsername(jtw);
+            authServiceClient.accountExists(username);
 
             if (username != null && SecurityContextHolder.getContext().getAuthentication() == null) {
                 // User not connected yet
                 UserDetails userDetails = this.userDetailsService.loadUserByUsername(username);
-                String newToken = authServiceClient.validateToken(jtw);
                 UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
                     userDetails,
                     null,
@@ -61,8 +61,6 @@ public class JwtFilter extends OncePerRequestFilter {
                     new WebAuthenticationDetailsSource().buildDetails(request)
                 );
                 SecurityContextHolder.getContext().setAuthentication(authToken);
-                // Update client token
-                response.setHeader("Authorization", "Bearer " + newToken);
             } else {
                 throw new InvalidJwtTokenException();
             }

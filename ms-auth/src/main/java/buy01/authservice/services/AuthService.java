@@ -76,6 +76,13 @@ public class AuthService {
         }
     }
 
+    public void accountExists(String username) {
+        Optional<Account> accountOptional = accountRepository.findByUsername(username);
+        if (!accountOptional.isPresent()) {
+            throw new AuthenticationException("User does not exist.");
+        }
+    }
+
      private String generateRandomSalt() {
         SecureRandom random = new SecureRandom();
         byte[] saltBytes = new byte[16];
