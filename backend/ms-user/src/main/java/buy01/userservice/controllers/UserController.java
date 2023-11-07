@@ -10,6 +10,8 @@ import buy01.userservice.models.User;
 import buy01.userservice.repository.UserRepository;
 import buy01.userservice.exceptions.UserNotFoundException;
 import jakarta.validation.Valid;
+
+import java.security.SecureRandom;
 import java.util.List;
 import java.util.Optional;
 import java.util.function.Consumer;
@@ -31,6 +33,21 @@ public class UserController {
             newUser.setId(userId);
             newUser.setUsername(registerRequest.getUsername());
             newUser.setEmail(registerRequest.getEmail());
+            newUser.setAvatar(registerRequest.getAvatar());
+
+            // If avatar is not provided, generate a basic avatar with initials
+            if (registerRequest.getAvatar() == null || registerRequest.getAvatar().isEmpty()) {
+                String backgroundColourHex = String.format("#%06x", new SecureRandom().nextInt(0xffffff + 1));
+                String textColourHex = String.format("#%06x", new SecureRandom().nextInt(0xffffff + 1));
+                String nameFormatted = registerRequest.getFirstName() + "+" + registerRequest.getLastName();
+                 if (nameFormatted.length() < 2) {
+                    nameFormatted = registerRequest.getUsername();
+                 }
+                 newUser.setAvatar("https://ui-avatars.com/api/?name=" + nameFormatted
+                                    + "&background=" + backgroundColourHex
+                                    + "&color=" + textColourHex);
+            }
+
             newUser.setFirstName(registerRequest.getFirstName());
             newUser.setLastName(registerRequest.getLastName());
             newUser.setStreetAddress(registerRequest.getStreetAddress());
@@ -109,6 +126,7 @@ public class UserController {
 
             setIfNotNullOrEmpty(user::setUsername, registerRequest.getUsername());
             setIfNotNullOrEmpty(user::setEmail, registerRequest.getEmail());
+            setIfNotNullOrEmpty(user::setAvatar, registerRequest.getAvatar());
             setIfNotNullOrEmpty(user::setFirstName, registerRequest.getFirstName());
             setIfNotNullOrEmpty(user::setLastName, registerRequest.getLastName());
             setIfNotNullOrEmpty(user::setStreetAddress, registerRequest.getStreetAddress());
