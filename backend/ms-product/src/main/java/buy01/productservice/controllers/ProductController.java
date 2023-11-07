@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.function.Consumer;
 
+import buy01.productservice.models.OrderItemRequest;
 import buy01.productservice.models.Product;
 import buy01.productservice.models.ProductRequest;
 import buy01.productservice.repositories.ProductRepository;
@@ -129,6 +130,23 @@ public class ProductController {
             // ADD LOGGING!!!
             System.out.println("Failed to delete account products. Error: " + e.getMessage());
             return ResponseEntity.badRequest().body("Failed to delete account products. Error: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/check-availabiliy")
+    public ResponseEntity<?> checkAvailability(@RequestBody OrderItemRequest orderItem) {
+        try {
+            Product product = productRepository.findById(orderItem.getProductId())
+                                            .orElseThrow(() -> new Exception("Product not found with id: " + orderItem.getProductId()));
+            if (product.getQuantity() >= orderItem.getQuantity()) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().body("Product with id: " + orderItem.getProductId() + " is not available in the requested quantity");
+            }
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to check availability. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to check availability. Error: " + e.getMessage());
         }
     }
 
