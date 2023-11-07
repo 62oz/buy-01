@@ -17,6 +17,7 @@ Other strategies could be token blacklisting, which would reek the most benefits
   - Individual services more control and also works for Kafka driven changes
   - So maybe both :D
 #### Basic CRUD endpoints
+##### Overview
 Here we complete all the basic CRUD operations for the main microservices i.e. auth, product, user, and media along with restrictions based on authentication and role.
 ##### Problems and visions
 - Same as previous.
