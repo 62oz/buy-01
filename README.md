@@ -23,3 +23,5 @@ Here we complete all the basic CRUD operations for the main microservices i.e. a
 - Same as previous.
 - Next add microservices for orders, notifications, and messages.
 - Media make request to hosting service in backend (includes validation).
+- Delete user should delete associated products.
+- Delete product should delete associated media.
