@@ -156,6 +156,18 @@ public class UserController {
         }
     }
 
+    @DeleteMapping("/delete-account-user/{userId}")
+    public ResponseEntity<?> deleteAccountUser(@PathVariable String userId) {
+        try {
+            userRepository.deleteById(userId);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to delete account user. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete account user. Error: " + e.getMessage());
+        }
+    }
+
     private void setIfNotNullOrEmpty(Consumer<String> setter, String value) {
         if (value != null && !value.isEmpty()) {
             setter.accept(value);

@@ -98,27 +98,13 @@ public class AuthService {
         }
     }
 
-    public void deleteAccount(String id, String jwt) {
-        String authenticatedUserId = jwtService.extractUserId(jwt);
-        Optional<Account> authenticatedAccountOptional = accountRepository.findByUserId(authenticatedUserId);
-
-        if (authenticatedAccountOptional.isPresent()) {
-            Account authenticatedAccount = authenticatedAccountOptional.get();
-            Optional<Account> accountToDeleteOptional = accountRepository.findByUserId(id);
-
-            if (accountToDeleteOptional.isPresent()) {
-                Account accountToDelete = accountToDeleteOptional.get();
-                if (!authenticatedAccount.getRole().equals(Role.ROLE_ADMIN) && !authenticatedAccount.getUserId().equals(id)) {
-                    throw new AuthenticationException("Only admins can delete other accounts.");
-                } else {
-                    accountRepository.delete(accountToDelete);
-                }
-            } else {
-                throw new AuthenticationException("Account to delete does not exist.");
-            }
-
+    public void deleteAccount(String userId, String jwt) {
+        Optional<Account> accountOptional = accountRepository.findByUserId(userId);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            accountRepository.delete(account);
         } else {
-            throw new AuthenticationException("Authenticated account does not exist. Check your token.");
+            throw new AuthenticationException("Account does not exist for user ID:" + userId);
         }
     }
 

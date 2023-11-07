@@ -92,15 +92,26 @@ public class ProductServiceClient {
     }
 
     public void deleteProduct(String id) {
-        ResponseEntity<Void> response = restTemplate.exchange(
+        ResponseEntity<Void> responseMedia = restTemplate.exchange(
+            "http://ms-media/api/media/delete-product-media/" + id,
+            HttpMethod.DELETE,
+            null,
+            Void.class
+        );
+
+        if (responseMedia.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to delete product media.");
+        }
+
+        ResponseEntity<Void> responseProduct = restTemplate.exchange(
             "http://ms-product/api/product/deleteProduct/" + id,
             HttpMethod.DELETE,
             null,
             Void.class
         );
 
-        if (response.getStatusCode() != HttpStatus.OK) {
-            throw new RuntimeException("Failed to delete product");
+        if (responseProduct.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to delete product.");
         }
     }
 }

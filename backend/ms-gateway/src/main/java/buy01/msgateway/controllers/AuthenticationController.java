@@ -2,6 +2,7 @@ package buy01.msgateway.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -78,6 +79,7 @@ public class AuthenticationController {
         }
     }
 
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #id == authentication.principal.id")
     @DeleteMapping("/deleteAccount/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable String id, UserServiceClient userServiceClient) {
         try {

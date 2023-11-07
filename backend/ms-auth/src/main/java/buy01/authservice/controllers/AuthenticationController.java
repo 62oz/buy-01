@@ -66,12 +66,12 @@ public class AuthenticationController {
         }
     }
 
-    @DeleteMapping("/delete-account/{id}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable String id,
+    @DeleteMapping("/delete-account/{userId}")
+    public ResponseEntity<Void> deleteAccount(@PathVariable String userId,
                                             @RequestHeader("Authorization") String authorizationHeader) {
         try {
             String jwt = authorizationHeader.substring(7);
-            authService.deleteAccount(id, jwt);
+            authService.deleteAccount(userId, jwt);
             return ResponseEntity.ok().build();
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
