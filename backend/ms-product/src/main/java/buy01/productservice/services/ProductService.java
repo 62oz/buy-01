@@ -2,6 +2,7 @@ package buy01.productservice.services;
 
 import org.springframework.stereotype.Service;
 
+import buy01.productservice.models.OrderItemRequest;
 import buy01.productservice.repositories.ProductRepository;
 import lombok.RequiredArgsConstructor;
 
@@ -15,5 +16,16 @@ public class ProductService {
         return productRepository.findById(productId)
                 .map(product -> product.getUserId().equals(authenticatedId))
                 .orElse(false);
+    }
+
+    public void updateInventory(OrderItemRequest orderItemRequest) {
+        String productId = orderItemRequest.getProductId();
+        Integer quantity = orderItemRequest.getQuantity();
+        productRepository.findById(productId)
+                .map(product -> {
+                    product.setAvailableQuantity(product.getAvailableQuantity() - quantity);
+                    return productRepository.save(product);
+                })
+                .orElseThrow(() -> new RuntimeException("Product not found for id:" + productId));
     }
 }

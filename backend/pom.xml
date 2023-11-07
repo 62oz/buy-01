@@ -79,7 +79,7 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
 
-        <!-- Spring Cloud Dependencies -->
+        <!-- Kafka Dependencies -->
 
         <dependency>
             <groupId>org.springframework.kafka</groupId>

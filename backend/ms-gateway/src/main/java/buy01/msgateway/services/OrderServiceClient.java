@@ -60,7 +60,7 @@ public class OrderServiceClient {
             Void.class);
 
         if (responseOrder.getStatusCode() != HttpStatus.OK) {
-            throw new RuntimeException("Failed to add item.");
+            throw new RuntimeException("Failed to add item to order.");
         }
     }
 }

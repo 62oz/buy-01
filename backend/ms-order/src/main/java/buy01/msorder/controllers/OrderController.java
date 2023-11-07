@@ -11,7 +11,9 @@ import org.springframework.web.bind.annotation.RestController;
 
 import buy01.msorder.enums.OrderStatus;
 import buy01.msorder.models.Order;
+import buy01.msorder.models.OrderItem;
 import buy01.msorder.repositories.OrderRepository;
+import buy01.msorder.services.OrderService;
 import lombok.RequiredArgsConstructor;
 
 @RestController
@@ -20,6 +22,7 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
     private final OrderRepository orderRepository;
+    private final OrderService orderService;
 
     @PostMapping("/create/{userId}")
     public void createOrder(@PathVariable String userId) {
@@ -45,6 +48,19 @@ public class OrderController {
             orderRepository.save(order);
         } else {
             throw new RuntimeException("Order does not exist for user with id: " + userId);
+        }
+    }
+
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PutMapping("/add-item/{userId}")
+    public void addItem(@PathVariable String userId, OrderItem orderItem) {
+        Optional<Order> orderOptional = orderRepository.findByUserId(userId);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            orderService.addItem(order, orderItem);
+        } else {
+            // This is supposed to never happen, because order is created when user is created
+            throw new RuntimeException("Order does not exist for user with id: " + userId );
         }
     }
 }
