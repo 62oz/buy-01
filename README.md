@@ -13,3 +13,6 @@ Other strategies could be token blacklisting, which would reek the most benefits
 - Hide keys in secrets or handle this in another way
 - Add logging :D
 - Not sure at which level to implement validations (gateway or individual services?)
+  - At gateway reduces unnecessary requests to other microservices
+  - Individual services more control and also works for Kafka driven changes
+  - So maybe both :D
