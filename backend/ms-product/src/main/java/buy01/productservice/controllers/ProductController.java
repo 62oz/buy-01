@@ -14,8 +14,6 @@ import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
 
-import org.springframework.http.HttpStatus;
-
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("api/product")
@@ -27,44 +25,44 @@ public class ProductController {
     private final JwtService jwtService;
 
     @GetMapping("/all")
-    public ResponseEntity<List<Product>> getAll() {
+    public ResponseEntity<?> getAll() {
         try {
             List<Product> products = productRepository.findAll();
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             // ADD LOGGING!!!
-            System.out.println("Failed to get all products");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("Failed to get all products. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to get all products. Error: " + e.getMessage());
         }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable String id) {
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
         try {
             Product product = productRepository.findById(id)
                                             .orElseThrow(() -> new Exception("Product not found with id: " + id));
             return ResponseEntity.ok(product);
         } catch (Exception e) {
             // ADD LOGGING!!!
-            System.out.println("Failed to get product by id");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("Failed to get product by id. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to get product by id. Error: " + e.getMessage());
         }
     }
 
     @GetMapping("/all/byUserId/{userId}")
-    public ResponseEntity<List<Product>> getProductsByUserId(@PathVariable String userId) {
+    public ResponseEntity<?> getProductsByUserId(@PathVariable String userId) {
         try {
             List<Product> products = productRepository.findByUserId(userId);
             return ResponseEntity.ok(products);
         } catch (Exception e) {
             // ADD LOGGING!!!
-            System.out.println("Failed to get products by user id");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("Failed to get products by user id. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to get products by user id. Error: " + e.getMessage());
         }
     }
 
     @PostMapping("/createProduct")
-    public ResponseEntity<Product> createProduct(@RequestBody ProductRequest productRequest,
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest,
                                                 @RequestHeader("Authorization") String authorizationHeader) {
         try {
             String jwt = authorizationHeader.substring(7);
@@ -81,13 +79,13 @@ public class ProductController {
             return ResponseEntity.ok(newProduct);
         } catch (Exception e) {
             // ADD LOGGING!!!
-            System.out.println("Failed to create product");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("Failed to create product. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to create product. Error: " + e.getMessage());
         }
     }
 
     @PutMapping("/updateProduct/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable String id,
+    public ResponseEntity<?> updateProduct(@PathVariable String id,
                                                 @RequestBody ProductRequest productRequest) {
         try {
             Product product = productRepository.findById(id)
@@ -101,20 +99,20 @@ public class ProductController {
             return ResponseEntity.ok(product);
         } catch (Exception e) {
             // ADD LOGGING!!!
-            System.out.println("Failed to update product");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("Failed to update product. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to update product. Error: " + e.getMessage());
         }
     }
 
     @DeleteMapping("/deleteProduct/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
+    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
             productRepository.deleteById(id);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
             // ADD LOGGING!!!
-            System.out.println("Failed to delete product");
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+            System.out.println("Failed to delete product. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete product. Error: " + e.getMessage());
         }
     }
 
