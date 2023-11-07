@@ -43,6 +43,18 @@ public class AuthServiceClient {
         }
     }
 
+    public void editRole(String id, String role) {
+        ResponseEntity<Void> response = restTemplate.postForEntity(
+            "http://ms-auth/api/auth/edit-role" + id,
+            role,
+            Void.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Role edit failed.");
+        }
+    }
+
+
     public void accountExists(String username) {
         ResponseEntity<Boolean> response = restTemplate.getForEntity(
             "http://ms-auth/api/auth/account-exists/" + username,

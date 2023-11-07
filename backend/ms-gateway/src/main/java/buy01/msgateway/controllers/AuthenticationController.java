@@ -2,7 +2,9 @@ package buy01.msgateway.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -61,6 +63,17 @@ public class AuthenticationController {
             return ResponseEntity.ok(responseBody);
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Registration failed");
+        }
+    }
+
+    @PutMapping("/editRole/{id}")
+    public ResponseEntity<?> editRole(@PathVariable String id, @RequestBody String role, UserServiceClient userServiceClient) {
+        try {
+            authServiceClient.editRole(id, role);
+
+            return ResponseEntity.ok("Role edited");
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Role edit failed");
         }
     }
 }

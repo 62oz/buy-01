@@ -72,10 +72,36 @@ public class AuthService {
         }
     }
 
+    public void editRole(String id, String role, String jwt) {
+        Role roleEnum = Role.valueOf(role);
+        String authenticatedUserId = jwtService.extractUserId(jwt);
+        Optional<Account> authenticatedAccountOptional = accountRepository.findByUserId(authenticatedUserId);
+
+        if (authenticatedAccountOptional.isPresent()) {
+            Account authenticatedAccount = authenticatedAccountOptional.get();
+            Optional<Account> accountToEditOptional = accountRepository.findByUserId(id);
+
+            if (accountToEditOptional.isPresent()) {
+                Account accountToEdit = accountToEditOptional.get();
+                if (roleEnum.equals(Role.ROLE_ADMIN) && !authenticatedAccount.getRole().equals(Role.ROLE_ADMIN)) {
+                    throw new AuthenticationException("Only admins can edit roles to admin.");
+                } else {
+                    accountToEdit.setRole(roleEnum);
+                    accountRepository.save(accountToEdit);
+                }
+            } else {
+                throw new AuthenticationException("Account to edit does not exist.");
+            }
+
+        } else {
+            throw new AuthenticationException("Authenticated account does not exist. Check your token.");
+        }
+    }
+
     public void accountExists(String username) {
         Optional<Account> accountOptional = accountRepository.findByUsername(username);
         if (!accountOptional.isPresent()) {
-            throw new AuthenticationException("User does not exist.");
+            throw new AuthenticationException("Account does not exist.");
         }
     }
 
