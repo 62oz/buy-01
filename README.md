@@ -12,3 +12,4 @@ Other strategies could be token blacklisting, which would reek the most benefits
 - Implement blacklisting tokens to reduce HTTP calls that are just to check if token represents a real account.
 - Hide keys in secrets or handle this in another way
 - Add logging :D
+- Not sure at which level to implement validations (gateway or individual services?)
