@@ -22,3 +22,4 @@ Here we complete all the basic CRUD operations for the main microservices i.e. a
 ##### Problems and visions
 - Same as previous.
 - Next add microservices for orders, notifications, and messages.
+- Media make request to hosting service in backend (includes validation).
