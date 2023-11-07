@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import buy01.msorder.enums.OrderStatus;
 import buy01.msorder.models.Order;
 import buy01.msorder.models.OrderItem;
 import buy01.msorder.repositories.OrderRepository;
@@ -42,10 +41,7 @@ public class OrderController {
         Optional<Order> orderOptional = orderRepository.findByUserId(userId);
         if (orderOptional.isPresent()) {
             Order order = orderOptional.get();
-            order.setItems(null);
-            order.setStatus(OrderStatus.CANCELLED);
-            order.setTotalAmount(null);
-            orderRepository.save(order);
+            orderService.emptyOrder(order);
         } else {
             throw new RuntimeException("Order does not exist for user with id: " + userId);
         }

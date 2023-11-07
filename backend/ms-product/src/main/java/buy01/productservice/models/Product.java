@@ -7,6 +7,8 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 import org.springframework.data.annotation.Id;
 
 @Document
@@ -20,7 +22,7 @@ public class Product {
     private String description;
     @NotNull(message = "Price cannot be null")
     @DecimalMin(value = "0.0", inclusive = true, message = "Price must be non-negative")
-    private Double price;
+    private BigDecimal price;
     @NotNull(message = "Price cannot be null")
     @DecimalMin(value = "0", inclusive = true, message = "Quantity must be non-negative")
     private Integer quantity;
