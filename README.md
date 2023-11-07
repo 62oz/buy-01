@@ -1,4 +1,5 @@
 # buy-01
+## Development
 ## Latest merges
 ### Spring cloud init
 #### Overview
@@ -10,3 +11,4 @@ Other strategies could be token blacklisting, which would reek the most benefits
 #### Problems and visions
 - Implement blacklisting tokens to reduce HTTP calls that are just to check if token represents a real account.
 - Hide keys in secrets or handle this in another way
+- Add logging :D
