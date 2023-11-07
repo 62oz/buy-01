@@ -87,4 +87,16 @@ public class MediaServiceClient {
 
         return response.getBody();
     }
+
+    public void deleteMedia(String id) {
+        ResponseEntity<Void> response = restTemplate.exchange(
+            "http://ms-media/api/media/deleteMedia/" + id,
+            HttpMethod.DELETE,
+            null,
+            Void.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to delete media");
+        }
+    }
 }

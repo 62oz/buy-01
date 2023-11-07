@@ -42,9 +42,16 @@ public class MediaController {
         return ResponseEntity.ok(mediaServiceClient.createMedia(mediaRequest));
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SELLER\") or  or #id == principal.id")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SELLER\")")
     @PostMapping("/updateMedia/{id}")
     public ResponseEntity<MediaResponse> updateMedia(String id, MediaRequest mediaRequest) {
         return ResponseEntity.ok(mediaServiceClient.updateMedia(id, mediaRequest));
+    }
+
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SELLER\")")
+    @PostMapping("/deleteMedia/{id}")
+    public ResponseEntity<Void> deleteMedia(String id) {
+        mediaServiceClient.deleteMedia(id);
+        return ResponseEntity.ok().build();
     }
 }

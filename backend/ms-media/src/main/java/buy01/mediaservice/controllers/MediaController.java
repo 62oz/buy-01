@@ -5,6 +5,7 @@ import java.util.function.Consumer;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -88,6 +89,7 @@ public class MediaController {
         }
     }
 
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, authentication.principal.id)")
     @PutMapping("/updateMedia/{id}")
     public ResponseEntity<?> updateMedia(@PathVariable String id,
                                             @RequestBody MediaRequest mediaRequest) {
@@ -104,6 +106,20 @@ public class MediaController {
             return ResponseEntity.badRequest().body("Failed to update media. Error: " + e.getMessage());
         }
     }
+
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, authentication.principal.id)")
+    @PostMapping("/deleteMedia/{id}")
+    public ResponseEntity<?> deleteMedia(@PathVariable String id) {
+        try {
+            mediaRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to delete media. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete media. Error: " + e.getMessage());
+        }
+    }
+
 
     private void setIfNotNullOrEmptyString(Consumer<String> setter, String value) {
         if (value != null && !value.isEmpty()) {

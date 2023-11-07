@@ -46,12 +46,14 @@ public class ProductController {
         return ResponseEntity.ok(productServiceClient.createProduct(productRequest));
     }
 
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SELLER\")")
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<ProductResponse> updateProduct(@PathVariable String id,
                                                     @RequestBody ProductRequest productRequest) {
         return ResponseEntity.ok(productServiceClient.updateProduct(id, productRequest));
     }
 
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or hasAuthority(\"ROLE_SELLER\")")
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<Void> deleteProduct(@PathVariable String id) {
         productServiceClient.deleteProduct(id);

@@ -13,6 +13,7 @@ import buy01.productservice.services.JwtService;
 import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
 @RequiredArgsConstructor
@@ -84,6 +85,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, authentication.principal.id)")
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable String id,
                                                 @RequestBody ProductRequest productRequest) {
@@ -104,6 +106,7 @@ public class ProductController {
         }
     }
 
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, authentication.principal.id)")
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
