@@ -54,6 +54,17 @@ public class AuthServiceClient {
         }
     }
 
+    public void deleteAccount(String id) {
+        ResponseEntity<Void> response = restTemplate.postForEntity(
+            "http://ms-auth/api/auth/delete-account" + id,
+            null,
+            Void.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Account deletion failed.");
+        }
+    }
+
 
     public void accountExists(String username) {
         ResponseEntity<Boolean> response = restTemplate.getForEntity(

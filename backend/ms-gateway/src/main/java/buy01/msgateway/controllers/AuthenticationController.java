@@ -2,6 +2,7 @@ package buy01.msgateway.controllers;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -74,6 +75,17 @@ public class AuthenticationController {
             return ResponseEntity.ok("Role edited");
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Role edit failed");
+        }
+    }
+
+    @DeleteMapping("/deleteAccount/{id}")
+    public ResponseEntity<?> deleteAccount(@PathVariable String id, UserServiceClient userServiceClient) {
+        try {
+            authServiceClient.deleteAccount(id);
+
+            return ResponseEntity.ok("Account deleted");
+        } catch (AuthenticationException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Account deletion failed");
         }
     }
 }
