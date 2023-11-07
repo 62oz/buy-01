@@ -13,9 +13,9 @@ import org.springframework.data.annotation.Id;
 public class Media {
     @Id
     private String id;
-    @NotNull(message = "Image path cannot be null")
-    @NotBlank(message = "Image path cannot be blank")
-    private String imagePath;
+    @NotNull(message = "Path cannot be null")
+    @NotBlank(message = "Path cannot be blank")
+    private String path;
     private String productId;
     private String userId;
 }

@@ -2,70 +2,138 @@ package buy01.productservice.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
+import java.util.function.Consumer;
 
 import buy01.productservice.models.Product;
-import buy01.productservice.models.ProductResponse;
-import buy01.productservice.services.ProductService;
-
-import jakarta.validation.Valid;
+import buy01.productservice.models.ProductRequest;
+import buy01.productservice.repositories.ProductRepository;
+import buy01.productservice.services.JwtService;
+import lombok.RequiredArgsConstructor;
 
 import org.springframework.http.ResponseEntity;
-
-import java.nio.file.AccessDeniedException;
-import java.security.Principal;
-import org.springframework.http.HttpStatus;
+import org.springframework.security.access.prepost.PreAuthorize;
 
 @RestController
-@RequestMapping("/products")
+@RequiredArgsConstructor
+@RequestMapping("api/product")
 public class ProductController {
 
     @Autowired
-    private ProductService productService;
+    private ProductRepository productRepository;
+    @Autowired
+    private final JwtService jwtService;
 
-    @GetMapping("/")
-    public List<ProductResponse> getAll() {
-        return productService.getAllProducts();
+    @GetMapping("/all")
+    public ResponseEntity<?> getAll() {
+        try {
+            List<Product> products = productRepository.findAll();
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to get all products. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to get all products. Error: " + e.getMessage());
+        }
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<ProductResponse> getById(@PathVariable String id) {
-        ProductResponse productResponse = productService.getProductById(id);
-        return ResponseEntity.ok(productResponse);
-    }
-
-    @GetMapping("/byUserId/{userId}")
-    public List<ProductResponse> getByUserId(@PathVariable String userId) {
-        return productService.getProductsByUserId(userId);
-    }
-
-    @PostMapping("/product")
-    public ResponseEntity<?> createProduct(@RequestBody @Valid Product product, Principal principal) {
+    public ResponseEntity<?> getProductById(@PathVariable String id) {
         try {
-            Product createdProduct = productService.createProduct(product, principal.getName());
-            return ResponseEntity.ok("Product created: " + createdProduct);
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            Product product = productRepository.findById(id)
+                                            .orElseThrow(() -> new Exception("Product not found with id: " + id));
+            return ResponseEntity.ok(product);
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to get product by id. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to get product by id. Error: " + e.getMessage());
         }
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable String id, @RequestBody @Valid Product updatedProduct, Principal principal) {
+    @GetMapping("/all/byUserId/{userId}")
+    public ResponseEntity<?> getProductsByUserId(@PathVariable String userId) {
         try {
-            Product product = productService.updateProduct(id, updatedProduct, principal.getName());
-            return ResponseEntity.ok("Product updated: " + product);
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            List<Product> products = productRepository.findByUserId(userId);
+            return ResponseEntity.ok(products);
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to get products by user id. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to get products by user id. Error: " + e.getMessage());
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteProduct(@PathVariable String id, Principal principal) {
+    @PostMapping("/createProduct")
+    public ResponseEntity<?> createProduct(@RequestBody ProductRequest productRequest,
+                                                @RequestHeader("Authorization") String authorizationHeader) {
         try {
-            productService.deleteProduct(id, principal.getName());
-            return ResponseEntity.ok("Product deleted");
-        } catch (AccessDeniedException e) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN).body("Access denied");
+            String jwt = authorizationHeader.substring(7);
+            // ADD error handling I guess
+            String userId = jwtService.extractUserId(jwt);
+            Product newProduct = new Product();
+            newProduct.setName(productRequest.getName());
+            newProduct.setDescription(productRequest.getDescription());
+            newProduct.setPrice(productRequest.getPrice());
+            newProduct.setQuantity(productRequest.getQuantity());
+            newProduct.setUserId(userId);
+
+            productRepository.save(newProduct);
+            return ResponseEntity.ok(newProduct);
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to create product. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to create product. Error: " + e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, authentication.principal.id)")
+    @PutMapping("/updateProduct/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable String id,
+                                                @RequestBody ProductRequest productRequest) {
+        try {
+            Product product = productRepository.findById(id)
+                                            .orElseThrow(() -> new Exception("Product not found with id: " + id));
+            setIfNotNullOrEmptyString(product::setName, productRequest.getName());
+            setIfNotNullOrEmptyString(product::setDescription, productRequest.getDescription());
+            setIfNotNullOrEmptyDouble(product::setPrice, productRequest.getPrice());
+            setIfNotNullOrEmptyInteger(product::setQuantity, productRequest.getQuantity());
+
+            productRepository.save(product);
+            return ResponseEntity.ok(product);
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to update product. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to update product. Error: " + e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, authentication.principal.id)")
+    @DeleteMapping("/deleteProduct/{id}")
+    public ResponseEntity<?> deleteProduct(@PathVariable String id) {
+        try {
+            productRepository.deleteById(id);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to delete product. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete product. Error: " + e.getMessage());
+        }
+    }
+
+    private void setIfNotNullOrEmptyString(Consumer<String> setter, String value) {
+        if (value != null && !value.isEmpty()) {
+            setter.accept(value);
+        }
+    }
+
+    private void setIfNotNullOrEmptyInteger(Consumer<Integer> setter, Integer value) {
+        if (value != null) {
+            setter.accept(value);
+        }
+    }
+
+    private void setIfNotNullOrEmptyDouble(Consumer<Double> setter, Double value) {
+        if (value != null) {
+            setter.accept(value);
         }
     }
 }

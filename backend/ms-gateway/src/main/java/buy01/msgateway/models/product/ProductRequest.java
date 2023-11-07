@@ -1,15 +1,16 @@
-package buy01.productservice.models;
-
-import org.springframework.data.mongodb.core.mapping.Document;
+package buy01.msgateway.models.product;
 
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
-@Document
 @Data
-public class ClientProductRequest {
+@NoArgsConstructor
+@AllArgsConstructor
+public class ProductRequest {
     @NotNull(message = "Name cannot be null")
     @NotBlank(message = "Name cannot be blank")
     private String name;

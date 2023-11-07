@@ -18,6 +18,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import buy01.authservice.enums.Role;
 import buy01.authservice.models.Account;
 import buy01.authservice.repositories.AccountRepository;
 import io.jsonwebtoken.JwtException;
@@ -74,6 +75,22 @@ public class JwtService {
     public String extractUsername(String jwt) throws JwtException {
         try {
             return Jwts.parserBuilder().setSigningKey(keyPair.getPublic()).build().parseClaimsJws(jwt).getBody().getSubject();
+        } catch (JwtException e) {
+            throw new JwtException("Invalid JWT. Please check your token.");
+        }
+    }
+
+    public Role extractRole(String jwt) throws JwtException {
+        try {
+            return Role.valueOf((String) Jwts.parserBuilder().setSigningKey(keyPair.getPublic()).build().parseClaimsJws(jwt).getBody().get("role"));
+        } catch (JwtException e) {
+            throw new JwtException("Invalid JWT. Please check your token.");
+        }
+    }
+
+    public String extractUserId(String jwt) throws JwtException {
+        try {
+            return (String) Jwts.parserBuilder().setSigningKey(keyPair.getPublic()).build().parseClaimsJws(jwt).getBody().get("userId");
         } catch (JwtException e) {
             throw new JwtException("Invalid JWT. Please check your token.");
         }
