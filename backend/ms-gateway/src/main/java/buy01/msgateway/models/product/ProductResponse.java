@@ -13,5 +13,6 @@ public class ProductResponse {
     String description;
     Double price;
     Integer quantity;
+    Integer availableQuantity = quantity;
     String userId;
 }

@@ -24,5 +24,6 @@ public class Product {
     @NotNull(message = "Price cannot be null")
     @DecimalMin(value = "0", inclusive = true, message = "Quantity must be non-negative")
     private Integer quantity;
+    private Integer availableQuantity = quantity;
     private String userId;
 }
