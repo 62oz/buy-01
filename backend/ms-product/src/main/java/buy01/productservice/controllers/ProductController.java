@@ -119,6 +119,19 @@ public class ProductController {
         }
     }
 
+    @DeleteMapping("/delete-account-products/{userId}")
+    public ResponseEntity<?> deleteAccountProducts(@PathVariable String userId) {
+        try {
+            List<Product> products = productRepository.findByUserId(userId);
+            productRepository.deleteAll(products);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to delete account products. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete account products. Error: " + e.getMessage());
+        }
+    }
+
     private void setIfNotNullOrEmptyString(Consumer<String> setter, String value) {
         if (value != null && !value.isEmpty()) {
             setter.accept(value);

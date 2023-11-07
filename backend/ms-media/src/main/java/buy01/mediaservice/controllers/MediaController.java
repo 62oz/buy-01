@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -108,7 +109,7 @@ public class MediaController {
     }
 
     @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, authentication.principal.id)")
-    @PostMapping("/deleteMedia/{id}")
+    @DeleteMapping("/deleteMedia/{id}")
     public ResponseEntity<?> deleteMedia(@PathVariable String id) {
         try {
             mediaRepository.deleteById(id);
@@ -117,6 +118,32 @@ public class MediaController {
             // ADD LOGGING!!!
             System.out.println("Failed to delete media. Error: " + e.getMessage());
             return ResponseEntity.badRequest().body("Failed to delete media. Error: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete-account-media/{userId}")
+    public ResponseEntity<?> deleteMediaByUserId(@PathVariable String userId) {
+        try {
+            List<Media> media = mediaRepository.findByUserId(userId);
+            mediaRepository.deleteAll(media);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to delete media by user id. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete media by user id. Error: " + e.getMessage());
+        }
+    }
+
+    @DeleteMapping("/delete-product-media/{productId}")
+    public ResponseEntity<?> deleteMediaByProductId(@PathVariable String productId) {
+        try {
+            List<Media> media = mediaRepository.findByProductId(productId);
+            mediaRepository.deleteAll(media);
+            return ResponseEntity.ok().build();
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to delete media by product id. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to delete media by product id. Error: " + e.getMessage());
         }
     }
 

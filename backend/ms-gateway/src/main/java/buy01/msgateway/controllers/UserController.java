@@ -4,7 +4,6 @@ import java.util.List;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -55,13 +54,6 @@ public class UserController {
     @PutMapping("/{id}")
     public ResponseEntity<Void> updateUser(@PathVariable String id, @Valid @RequestBody RegisterRequest registerRequest) {
         userServiceClient.updateUser(id, registerRequest);
-        return ResponseEntity.ok().build();
-    }
-
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or #id == principal.id")
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable String id) {
-        userServiceClient.deleteUser(id);
         return ResponseEntity.ok().build();
     }
 }

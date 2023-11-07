@@ -98,6 +98,16 @@ public class AuthService {
         }
     }
 
+    public void deleteAccount(String userId, String jwt) {
+        Optional<Account> accountOptional = accountRepository.findByUserId(userId);
+        if (accountOptional.isPresent()) {
+            Account account = accountOptional.get();
+            accountRepository.delete(account);
+        } else {
+            throw new AuthenticationException("Account does not exist for user ID:" + userId);
+        }
+    }
+
     public void accountExists(String username) {
         Optional<Account> accountOptional = accountRepository.findByUsername(username);
         if (!accountOptional.isPresent()) {

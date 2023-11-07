@@ -54,6 +54,53 @@ public class AuthServiceClient {
         }
     }
 
+    public void deleteAccount(String id) {
+        ResponseEntity<Void> responseMedia = restTemplate.postForEntity(
+            "http://ms-media/api/media/delete-account-media" + id,
+            null,
+            Void.class);
+
+        if (responseMedia.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Account deletion failed. Can't delete account media.");
+        }
+
+        ResponseEntity<Void> responseProduct = restTemplate.postForEntity(
+            "http://ms-product/api/product/delete-account-products" + id,
+            null,
+            Void.class);
+
+        if (responseProduct.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Account deletion failed. Can't delete account products.");
+        }
+
+        ResponseEntity<Void> responseNotification = restTemplate.postForEntity(
+            "http://ms-notification/api/notification/delete-account-notifications" + id,
+            null,
+            Void.class);
+
+        if (responseNotification.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Account deletion failed. Can't delete account notifications.");
+        }
+
+        ResponseEntity<Void> responseUser = restTemplate.postForEntity(
+            "http://ms-user/api/user/delete-account-user" + id,
+            null,
+            Void.class);
+
+        if (responseUser.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Account deletion failed. Can't delete account user.");
+        }
+
+        ResponseEntity<Void> responseAccount = restTemplate.postForEntity(
+            "http://ms-auth/api/auth/delete-account" + id,
+            null,
+            Void.class);
+
+        if (responseAccount.getStatusCode() != HttpStatus.OK) {
+            throw new AuthenticationException("Account deletion failed.");
+        }
+    }
+
 
     public void accountExists(String username) {
         ResponseEntity<Boolean> response = restTemplate.getForEntity(
