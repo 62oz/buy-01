@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import buy01.msnotification.enums.Status;
+import buy01.msnotification.enums.NotificationStatus;
 import buy01.msnotification.models.Notification;
 import buy01.msnotification.repositories.NotificationRepository;
 import lombok.RequiredArgsConstructor;
@@ -65,7 +65,7 @@ public class NotificationController {
         try {
             Notification notification = notificationRepository.findById(id)
                                             .orElseThrow(() -> new Exception("Notification not found with id: " + id));
-            notification.setStatus(Status.STATUS_READ);
+            notification.setStatus(NotificationStatus.READ);
             notificationRepository.save(notification);
             return ResponseEntity.ok().build();
         } catch (Exception e) {
