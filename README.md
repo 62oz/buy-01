@@ -39,4 +39,4 @@ Kafka: When a user orders a quantity of a product, the product inventory is asyn
 ##### Problems and visions
 - Kafka messages to notify, for example: about a product available quantity reaching 0 (to the user who posted the product). What else can we come up with? This is just for fun I guess lol but would be nice to have a somewhat complete e-commerce page at the end of this.
 - We can't yet complete order.
-- Currently order is created at user creation, but a user should be able to keep completed orders in history, so: add ability to create a new order if a user's order(s) is/are status.COMPLETED
+- ~~Currently order is created at user creation, but a user should be able to keep completed orders in history, so: add ability to create a new order if there are no status.PENDING orders.~~
