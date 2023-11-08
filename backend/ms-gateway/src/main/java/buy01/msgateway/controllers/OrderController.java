@@ -26,9 +26,21 @@ public class OrderController {
         return ResponseEntity.ok().build();
     }
 
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or hasRole(\"ROLE_CLIENT\")")
     @PutMapping("/add-items/{userId}")
+    // The hope here is that the orderItemRequest object carries:
+    // productId, quantity, and unitPrice of the product
     public ResponseEntity<?> addItem(@PathVariable String userId, @RequestBody OrderItemRequest orderItem) {
         orderServiceClient.addItem(userId, orderItem);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or hasRole(\"ROLE_CLIENT\")")
+    @PutMapping("/remove-items/{userId}")
+    // The hope here is that the orderItemRequest object carries:
+    // productId, quantity, and unitPrice of the product
+    public ResponseEntity<?> removeItem(@PathVariable String userId, @RequestBody OrderItemRequest orderItem) {
+        orderServiceClient.removeItem(userId, orderItem);
         return ResponseEntity.ok().build();
     }
 }

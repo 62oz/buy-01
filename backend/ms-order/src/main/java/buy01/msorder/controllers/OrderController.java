@@ -59,4 +59,17 @@ public class OrderController {
             throw new RuntimeException("Order does not exist for user with id: " + userId );
         }
     }
+
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PutMapping("/remove-item/{userId}")
+    public void removeItem(@PathVariable String userId, OrderItem orderItem) {
+        Optional<Order> orderOptional = orderRepository.findByUserId(userId);
+        if (orderOptional.isPresent()) {
+            Order order = orderOptional.get();
+            orderService.removeItem(order, orderItem);
+        } else {
+            // This is supposed to never happen, because order is created when user is created
+            throw new RuntimeException("Order does not exist for user with id: " + userId );
+        }
+    }
 }

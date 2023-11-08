@@ -63,4 +63,18 @@ public class OrderServiceClient {
             throw new RuntimeException("Failed to add item to order.");
         }
     }
+
+    public void removeItem(String userId, OrderItemRequest orderItem) {
+        HttpEntity<OrderItemRequest> request = new HttpEntity<>(orderItem);
+        // Remove item from order synchronously (it will asynchronously update avialble quantity of product)
+        ResponseEntity<Void> responseOrder = restTemplate.exchange(
+            "http://ms-order/api/order/remove-item/" + userId,
+            HttpMethod.PUT,
+            request,
+            Void.class);
+
+        if (responseOrder.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to remove item from order.");
+        }
+    }
 }

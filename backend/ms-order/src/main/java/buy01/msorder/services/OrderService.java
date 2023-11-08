@@ -38,7 +38,6 @@ public class OrderService {
             itemExists = item.getProductId().equals(orderItem.getProductId());
             if (itemExists) {
                 item.setQuantity(item.getQuantity() + orderItem.getQuantity());
-                orderProducer.updateInventory(item);
                 break;
             }
         }
@@ -49,6 +48,32 @@ public class OrderService {
         BigDecimal quantityBD = BigDecimal.valueOf(orderItem.getQuantity());
         order.getTotalAmount().add(quantityBD.multiply(orderItem.getUnitPrice()));
         orderRepository.save(order);
+        orderProducer.updateInventory(orderItem);
+    }
+
+    public void removeItem(Order order, OrderItem orderItem) {
+        List<OrderItem> itemsInOrder = order.getItems();
+        Boolean itemExists = false;
+
+        for (OrderItem item : itemsInOrder) {
+            itemExists = item.getProductId().equals(orderItem.getProductId());
+            if (itemExists) {
+                item.setQuantity(item.getQuantity() - orderItem.getQuantity());
+                if (item.getQuantity() <= 0) {
+                    itemsInOrder.remove(item);
+                }
+                break;
+            }
+        }
+
+        if (!itemExists) {
+            throw new RuntimeException("Item does not exist in order");
+        }
+
+        BigDecimal quantityBD = BigDecimal.valueOf(orderItem.getQuantity());
+        order.getTotalAmount().subtract(quantityBD.multiply(orderItem.getUnitPrice()));
+        orderRepository.save(order);
+        orderItem.setQuantity(-orderItem.getQuantity());
         orderProducer.updateInventory(orderItem);
     }
 }
