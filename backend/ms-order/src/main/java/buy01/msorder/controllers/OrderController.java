@@ -27,21 +27,21 @@ public class OrderController {
         return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
     @PutMapping("/empty/{userId}")
     public ResponseEntity<?> emptyOrder(@PathVariable String userId) {
         Order emptyOrder = orderService.emptyOrder(userId);
         return new ResponseEntity<>(emptyOrder, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
     @PutMapping("/add-item/{userId}")
     public ResponseEntity<?> addItem(@PathVariable String userId, OrderItem orderItem) {
         Order updatedOrder = orderService.addItem(userId, orderItem);
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
     @PutMapping("/remove-item/{userId}")
     public ResponseEntity<?> removeItem(@PathVariable String userId, OrderItem orderItem) {
         Order updatedOrder = orderService.removeItem(userId, orderItem);
