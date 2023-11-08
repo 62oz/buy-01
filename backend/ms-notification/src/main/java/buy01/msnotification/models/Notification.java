@@ -8,7 +8,7 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 
-import buy01.msnotification.enums.Status;
+import buy01.msnotification.enums.NotificationStatus;
 import lombok.Data;
 
 @Document
@@ -21,6 +21,6 @@ public class Notification {
     @NotNull(message = "Message cannot be null.")
     @NotBlank(message = "Message cannot be blank.")
     private String message;
-    private Status status = Status.STATUS_UNREAD;
+    private NotificationStatus status = NotificationStatus.UNREAD;
     private String createdAt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'").format(new Date());
 }

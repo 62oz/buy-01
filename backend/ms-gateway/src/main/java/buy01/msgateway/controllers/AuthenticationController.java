@@ -16,6 +16,7 @@ import buy01.msgateway.models.auth.LoginRequest;
 import buy01.msgateway.models.auth.RegisterRequest;
 import buy01.msgateway.services.AuthServiceClient;
 import buy01.msgateway.services.JwtService;
+import buy01.msgateway.services.OrderServiceClient;
 import buy01.msgateway.services.SecurityContextService;
 import buy01.msgateway.services.UserServiceClient;
 import lombok.RequiredArgsConstructor;
@@ -28,11 +29,13 @@ import java.util.HashMap;
 public class AuthenticationController {
 
     private final AuthServiceClient authServiceClient;
+    private final UserServiceClient userServiceClient;
+    private final OrderServiceClient orderServiceClient;
     private final SecurityContextService securityContextService;
     private final JwtService jwtService;
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest, UserServiceClient userServiceClient) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
             AuthResponse jwtDto = authServiceClient.authenticate(loginRequest);
             String jwt = jwtDto.getJwt();
@@ -49,13 +52,14 @@ public class AuthenticationController {
     }
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest, UserServiceClient userServiceClient) {
+    public ResponseEntity<?> register(@RequestBody RegisterRequest registerRequest) {
         try {
             AuthResponse jwtDto = authServiceClient.register(registerRequest);
             String jwt = jwtDto.getJwt();
             String userId = jwtService.extractUserId(jwt);
 
             userServiceClient.createUser(userId, registerRequest);
+            orderServiceClient.createOrder(userId);
 
             securityContextService.setAuthentication(jwt);
 
@@ -69,7 +73,7 @@ public class AuthenticationController {
     }
 
     @PutMapping("/editRole/{id}")
-    public ResponseEntity<?> editRole(@PathVariable String id, @RequestBody String role, UserServiceClient userServiceClient) {
+    public ResponseEntity<?> editRole(@PathVariable String id, @RequestBody String role) {
         try {
             authServiceClient.editRole(id, role);
 
@@ -81,7 +85,7 @@ public class AuthenticationController {
 
     @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #id == authentication.principal.id")
     @DeleteMapping("/deleteAccount/{id}")
-    public ResponseEntity<?> deleteAccount(@PathVariable String id, UserServiceClient userServiceClient) {
+    public ResponseEntity<?> deleteAccount(@PathVariable String id) {
         try {
             authServiceClient.deleteAccount(id);
 

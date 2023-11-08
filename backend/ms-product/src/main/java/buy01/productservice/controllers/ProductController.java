@@ -3,9 +3,11 @@ package buy01.productservice.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.function.Consumer;
 
+import buy01.productservice.models.OrderItemRequest;
 import buy01.productservice.models.Product;
 import buy01.productservice.models.ProductRequest;
 import buy01.productservice.repositories.ProductRepository;
@@ -94,7 +96,7 @@ public class ProductController {
                                             .orElseThrow(() -> new Exception("Product not found with id: " + id));
             setIfNotNullOrEmptyString(product::setName, productRequest.getName());
             setIfNotNullOrEmptyString(product::setDescription, productRequest.getDescription());
-            setIfNotNullOrEmptyDouble(product::setPrice, productRequest.getPrice());
+            setIfNotNullOrEmptyBigDecimal(product::setPrice, productRequest.getPrice());
             setIfNotNullOrEmptyInteger(product::setQuantity, productRequest.getQuantity());
 
             productRepository.save(product);
@@ -132,6 +134,23 @@ public class ProductController {
         }
     }
 
+    @GetMapping("/check-availabiliy")
+    public ResponseEntity<?> checkAvailability(@RequestBody OrderItemRequest orderItem) {
+        try {
+            Product product = productRepository.findById(orderItem.getProductId())
+                                            .orElseThrow(() -> new Exception("Product not found with id: " + orderItem.getProductId()));
+            if (product.getQuantity() >= orderItem.getQuantity()) {
+                return ResponseEntity.ok().build();
+            } else {
+                return ResponseEntity.badRequest().body("Product with id: " + orderItem.getProductId() + " is not available in the requested quantity");
+            }
+        } catch (Exception e) {
+            // ADD LOGGING!!!
+            System.out.println("Failed to check availability. Error: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Failed to check availability. Error: " + e.getMessage());
+        }
+    }
+
     private void setIfNotNullOrEmptyString(Consumer<String> setter, String value) {
         if (value != null && !value.isEmpty()) {
             setter.accept(value);
@@ -144,7 +163,7 @@ public class ProductController {
         }
     }
 
-    private void setIfNotNullOrEmptyDouble(Consumer<Double> setter, Double value) {
+    private void setIfNotNullOrEmptyBigDecimal(Consumer<BigDecimal> setter, BigDecimal value) {
         if (value != null) {
             setter.accept(value);
         }

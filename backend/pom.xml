@@ -23,6 +23,8 @@
     <module>ms-eureka-server</module>
     <module>ms-config-server</module>
     <module>ms-gateway</module>
+    <module>ms-notification</module>
+    <module>ms-order</module>
   </modules>
 
   <dependencyManagement>
@@ -77,7 +79,7 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
 
-        <!-- Spring Cloud Dependencies -->
+        <!-- Kafka Dependencies -->
 
         <dependency>
             <groupId>org.springframework.kafka</groupId>

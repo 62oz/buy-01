@@ -1,4 +1,4 @@
-package buy01.productservice.models;
+package buy01.msorder.models;
 
 import java.math.BigDecimal;
 
@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequest {
-    private String name;
-    private String description;
-    private BigDecimal price;
+public class OrderItem {
+    private String productId;
     private Integer quantity;
+    private BigDecimal unitPrice;
 }

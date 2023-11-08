@@ -1,4 +1,4 @@
-package buy01.productservice.models;
+package buy01.msgateway.models.order;
 
 import java.math.BigDecimal;
 
@@ -7,11 +7,10 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@NoArgsConstructor
 @AllArgsConstructor
-public class ProductRequest {
-    private String name;
-    private String description;
-    private BigDecimal price;
+@NoArgsConstructor
+public class OrderItemRequest {
+    private String productId;
     private Integer quantity;
+    private BigDecimal unitPrice;
 }
