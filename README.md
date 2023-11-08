@@ -30,4 +30,4 @@ Here we complete all the basic CRUD operations for the main microservices i.e. a
 Here we initialise the basic setup for the notifications service, including CRUD and we also introduce delete cascades accross all services.
 ##### Problems and visions
 - Implement asynchronous communication in services to send notifications using Kafka (mayeb after all services and CRUDs are setup).
-- Implement SecurityConfig in each MS that parses the JWT and populates the SecurityContext.
+- Implement SecurityConfig in each MS that parses the JWT and populates the SecurityContext (this will allow us to use principal in @PreAuthorize).
