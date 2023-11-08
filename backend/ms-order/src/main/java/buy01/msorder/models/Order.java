@@ -22,10 +22,10 @@ public class Order {
     @NotNull
     private List<OrderItem> items;
     @NotNull
-    private OrderStatus status;
+    private OrderStatus status = OrderStatus.PENDING;
     @NotNull
     private PaymentMethod paymentMethod;
     @NotNull
     private LocalDateTime orderDate;
-    private BigDecimal totalAmount;
+    private BigDecimal totalAmount = BigDecimal.ZERO;
 }
