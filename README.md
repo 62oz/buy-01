@@ -31,3 +31,11 @@ Here we initialise the basic setup for the notifications service, including CRUD
 ##### Problems and visions
 - Implement asynchronous communication in services to send notifications using Kafka (mayeb after all services and CRUDs are setup).
 - Implement SecurityConfig in each MS that parses the JWT and populates the SecurityContext (this will allow us to use principal in @PreAuthorize).
+#### Order service init
+##### Overview
+Here we initialize the order microservice and client discoverable.
+The CRUD endpoints needed: every user gets an order entity at account creation and it has different possible statuses. For now order can be cancelled (emptied) and we can add or remove items.
+Kafka: When a user orders a quantity of a product, the product inventory is asynchronously upadted with a kafka message.
+##### Problems and visions
+- Kafka messages to notify, for example: about a product available quantity reaching 0 (to the user who posted the product). What else can we come up with? This is just for fun I guess lol but would be nice to have a somewhat complete e-commerce page at the end of this.
+- We can't yet complete order.
