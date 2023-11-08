@@ -32,7 +32,7 @@ public class NotificationController {
         return ResponseEntity.ok(notificationServiceClient.getNotificationById(id));
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or #userId == authentication.principal.username")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or #userId == principal.id")
     @GetMapping("/all/byUserId/{userId}")
     public ResponseEntity<List<NotificationResponse>> getNotificationByUserId(String userId) {
         return ResponseEntity.ok(notificationServiceClient.getNotificationByUserId(userId));

@@ -87,7 +87,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, authentication.principal.id)")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, principal.id)")
     @PutMapping("/updateProduct/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable String id,
                                                 @RequestBody ProductRequest productRequest) {
@@ -108,7 +108,7 @@ public class ProductController {
         }
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, authentication.principal.id)")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @productService.isOwner(#id, principal.id)")
     @DeleteMapping("/deleteProduct/{id}")
     public ResponseEntity<?> deleteProduct(@PathVariable String id) {
         try {
@@ -142,7 +142,8 @@ public class ProductController {
             if (product.getQuantity() >= orderItem.getQuantity()) {
                 return ResponseEntity.ok().build();
             } else {
-                return ResponseEntity.badRequest().body("Product with id: " + orderItem.getProductId() + " is not available in the requested quantity");
+                return ResponseEntity.badRequest()
+                .body("Product with id: " + orderItem.getProductId() + " is not available in the requested quantity");
             }
         } catch (Exception e) {
             // ADD LOGGING!!!

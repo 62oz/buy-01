@@ -83,7 +83,7 @@ public class AuthenticationController {
         }
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #id == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #id == principal.id")
     @DeleteMapping("/deleteAccount/{id}")
     public ResponseEntity<?> deleteAccount(@PathVariable String id) {
         try {

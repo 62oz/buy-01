@@ -90,7 +90,7 @@ public class MediaController {
         }
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, authentication.principal.id)")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, principal.id)")
     @PutMapping("/updateMedia/{id}")
     public ResponseEntity<?> updateMedia(@PathVariable String id,
                                             @RequestBody MediaRequest mediaRequest) {
@@ -108,7 +108,7 @@ public class MediaController {
         }
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, authentication.principal.id)")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @mediaService.isOwner(#id, principal.id)")
     @DeleteMapping("/deleteMedia/{id}")
     public ResponseEntity<?> deleteMedia(@PathVariable String id) {
         try {
