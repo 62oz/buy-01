@@ -2,6 +2,7 @@ package buy01.msorder.services;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.stereotype.Service;
 
@@ -19,19 +20,45 @@ public class OrderService {
     private final OrderRepository orderRepository;
     private final OrderProducer orderProducer;
 
-    public void emptyOrder(Order order) {
-        List<OrderItem> itemsInOrder = order.getItems();
-        for (OrderItem item : itemsInOrder) {
-            item.setQuantity(-item.getQuantity());
-            orderProducer.updateInventory(item);
+    public Order createOrder(String userId) {
+        if (getPending(userId) != null) {
+            throw new RuntimeException("There is already a pending order for user with id: " + userId);
         }
-        order.setStatus(OrderStatus.CANCELLED);
-        order.getItems().clear();
-        order.setTotalAmount(null);
+        Order newOrder = new Order();
+        newOrder.setUserId(userId);
+        orderRepository.save(newOrder);
+        return newOrder;
     }
 
-    public void addItem(Order order, OrderItem orderItem) {
-        List<OrderItem> itemsInOrder = order.getItems();
+    private Order getPending(String userId) {
+        List<Optional<Order>> orderOptionalList = orderRepository.findByUserId(userId);
+        for (Optional<Order> orderOptional : orderOptionalList) {
+            Order order = orderOptional.get();
+            if (order.getStatus().equals(OrderStatus.PENDING)) {
+                return order;
+            }
+        }
+        return null;
+    }
+
+    public Order emptyOrder(String userId) {
+        Order pendingOrder = getPending(userId);
+        if (pendingOrder == null) {
+            throw new RuntimeException("There is no pending order for user with id: " + userId);
+        }
+        pendingOrder.getItems().clear();
+        pendingOrder.setTotalAmount(BigDecimal.ZERO);
+        orderRepository.save(pendingOrder);
+        return pendingOrder;
+    }
+
+    public Order addItem(String userId, OrderItem orderItem) {
+        Order pendingOrder = getPending(userId);
+        if (pendingOrder == null) {
+            pendingOrder = createOrder(userId);
+        }
+
+        List<OrderItem> itemsInOrder = pendingOrder.getItems();
         Boolean itemExists = false;
 
         for (OrderItem item : itemsInOrder) {
@@ -46,13 +73,19 @@ public class OrderService {
             itemsInOrder.add(orderItem);
         }
         BigDecimal quantityBD = BigDecimal.valueOf(orderItem.getQuantity());
-        order.getTotalAmount().add(quantityBD.multiply(orderItem.getUnitPrice()));
-        orderRepository.save(order);
+        pendingOrder.getTotalAmount().add(quantityBD.multiply(orderItem.getUnitPrice()));
+        orderRepository.save(pendingOrder);
         orderProducer.updateInventory(orderItem);
+        return pendingOrder;
     }
 
-    public void removeItem(Order order, OrderItem orderItem) {
-        List<OrderItem> itemsInOrder = order.getItems();
+    public Order removeItem(String userId, OrderItem orderItem) {
+        Order pendingOrder = getPending(userId);
+        if (pendingOrder == null) {
+            throw new RuntimeException("There is no pending order for user with id: " + userId);
+        }
+
+        List<OrderItem> itemsInOrder = pendingOrder.getItems();
         Boolean itemExists = false;
 
         for (OrderItem item : itemsInOrder) {
@@ -71,9 +104,10 @@ public class OrderService {
         }
 
         BigDecimal quantityBD = BigDecimal.valueOf(orderItem.getQuantity());
-        order.getTotalAmount().subtract(quantityBD.multiply(orderItem.getUnitPrice()));
-        orderRepository.save(order);
+        pendingOrder.getTotalAmount().subtract(quantityBD.multiply(orderItem.getUnitPrice()));
+        orderRepository.save(pendingOrder);
         orderItem.setQuantity(-orderItem.getQuantity());
         orderProducer.updateInventory(orderItem);
+        return pendingOrder;
     }
 }

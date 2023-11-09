@@ -1,4 +1,4 @@
-package buy01.productservice.services;
+package buy01.msorder.services;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -10,7 +10,6 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -22,7 +21,7 @@ public class JwtService {
     private static final String PUBLIC_KEY_PATH = "./public_key.pem";
     private KeyPair keyPair;
 
-        @PostConstruct
+    @PostConstruct
     public void init() {
         try {
             byte[] publicKeyBytes = Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH));
@@ -34,15 +33,6 @@ public class JwtService {
             throw new IllegalStateException("Could not load keys", e);
         }
     }
-
-    public String getAuthenticatedId() {
-        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
-        if (principal instanceof JwtUserDetails) {
-            return ((JwtUserDetails) principal).getUserId();
-        }
-        throw new IllegalStateException("Could not get authenticated user ID");
-    }
-
 
     public String extractUserId(String jwt) {
         Claims claims = extractAllClaims(jwt);

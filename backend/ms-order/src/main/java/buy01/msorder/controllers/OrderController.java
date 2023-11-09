@@ -1,7 +1,7 @@
 package buy01.msorder.controllers;
 
-import java.util.Optional;
-
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import buy01.msorder.models.Order;
 import buy01.msorder.models.OrderItem;
-import buy01.msorder.repositories.OrderRepository;
 import buy01.msorder.services.OrderService;
 import lombok.RequiredArgsConstructor;
 
@@ -20,56 +19,32 @@ import lombok.RequiredArgsConstructor;
 @RequestMapping("/api/order")
 public class OrderController {
 
-    private final OrderRepository orderRepository;
     private final OrderService orderService;
 
     @PostMapping("/create/{userId}")
-    public void createOrder(@PathVariable String userId) {
-        Optional<Order> order = orderRepository.findByUserId(userId);
-        if (order.isPresent()) {
-            throw new RuntimeException("Order already exists for user with id: " + userId);
-        } else {
-            Order newOrder = new Order();
-            newOrder.setUserId(userId);
-            orderRepository.save(newOrder);
-        }
+    public ResponseEntity<?> createOrder(@PathVariable String userId) {
+        Order newOrder = orderService.createOrder(userId);
+        return new ResponseEntity<>(newOrder, HttpStatus.CREATED);
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
     @PutMapping("/empty/{userId}")
-    public void emptyOrder(@PathVariable String userId) {
-        Optional<Order> orderOptional = orderRepository.findByUserId(userId);
-        if (orderOptional.isPresent()) {
-            Order order = orderOptional.get();
-            orderService.emptyOrder(order);
-        } else {
-            throw new RuntimeException("Order does not exist for user with id: " + userId);
-        }
+    public ResponseEntity<?> emptyOrder(@PathVariable String userId) {
+        Order emptyOrder = orderService.emptyOrder(userId);
+        return new ResponseEntity<>(emptyOrder, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
     @PutMapping("/add-item/{userId}")
-    public void addItem(@PathVariable String userId, OrderItem orderItem) {
-        Optional<Order> orderOptional = orderRepository.findByUserId(userId);
-        if (orderOptional.isPresent()) {
-            Order order = orderOptional.get();
-            orderService.addItem(order, orderItem);
-        } else {
-            // This is supposed to never happen, because order is created when user is created
-            throw new RuntimeException("Order does not exist for user with id: " + userId );
-        }
+    public ResponseEntity<?> addItem(@PathVariable String userId, OrderItem orderItem) {
+        Order updatedOrder = orderService.addItem(userId, orderItem);
+        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 
-    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == authentication.principal.id")
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
     @PutMapping("/remove-item/{userId}")
-    public void removeItem(@PathVariable String userId, OrderItem orderItem) {
-        Optional<Order> orderOptional = orderRepository.findByUserId(userId);
-        if (orderOptional.isPresent()) {
-            Order order = orderOptional.get();
-            orderService.removeItem(order, orderItem);
-        } else {
-            // This is supposed to never happen, because order is created when user is created
-            throw new RuntimeException("Order does not exist for user with id: " + userId );
-        }
+    public ResponseEntity<?> removeItem(@PathVariable String userId, OrderItem orderItem) {
+        Order updatedOrder = orderService.removeItem(userId, orderItem);
+        return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
 }

@@ -13,6 +13,7 @@ import buy01.authservice.models.LoginRequest;
 import buy01.authservice.models.RegisterRequest;
 import buy01.authservice.enums.Role;
 import buy01.authservice.exceptions.AuthenticationException;
+import buy01.authservice.kafka.AuthProducer;
 import buy01.authservice.models.Account;
 import buy01.authservice.repositories.AccountRepository;
 import jakarta.annotation.PostConstruct;
@@ -35,6 +36,7 @@ public class AuthService {
     private final AccountRepository accountRepository;
     @Autowired
     private final JwtService jwtService;
+    private final AuthProducer authProducer;
 
     public AuthResponse authenticateUser(LoginRequest loginRequest) {
         Optional<Account> accountOptional = accountRepository.findByUsername(loginRequest.getUsername());
@@ -72,14 +74,14 @@ public class AuthService {
         }
     }
 
-    public void editRole(String id, String role, String jwt) {
+    public void editRole(String userId, String role, String jwt) {
         Role roleEnum = Role.valueOf(role);
         String authenticatedUserId = jwtService.extractUserId(jwt);
         Optional<Account> authenticatedAccountOptional = accountRepository.findByUserId(authenticatedUserId);
 
         if (authenticatedAccountOptional.isPresent()) {
             Account authenticatedAccount = authenticatedAccountOptional.get();
-            Optional<Account> accountToEditOptional = accountRepository.findByUserId(id);
+            Optional<Account> accountToEditOptional = accountRepository.findByUserId(userId);
 
             if (accountToEditOptional.isPresent()) {
                 Account accountToEdit = accountToEditOptional.get();
@@ -98,10 +100,13 @@ public class AuthService {
         }
     }
 
-    public void deleteAccount(String userId, String jwt) {
+    public void deleteAccount(String userId) {
         Optional<Account> accountOptional = accountRepository.findByUserId(userId);
         if (accountOptional.isPresent()) {
             Account account = accountOptional.get();
+            // Send kafka message to delete associated user profile and products
+            authProducer.deleteAccount(account.getId());
+            // Delete account
             accountRepository.delete(account);
         } else {
             throw new AuthenticationException("Account does not exist for user ID:" + userId);

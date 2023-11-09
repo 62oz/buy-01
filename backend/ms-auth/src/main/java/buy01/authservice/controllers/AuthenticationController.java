@@ -3,6 +3,7 @@ package buy01.authservice.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,25 +54,25 @@ public class AuthenticationController {
         }
     }
 
-    @PutMapping("/edit-role/{id}")
-    public ResponseEntity<Void> editRole(@PathVariable String id,
+    @PreAuthorize("hasRole(\"ADMIN\") or #userId == principal.id")
+    @PutMapping("/edit-role/{userId}")
+    public ResponseEntity<?> editRole(@PathVariable String userId,
                                         @RequestBody String role,
                                         @RequestHeader("Authorization") String authorizationHeader) {
         try {
             String jwt = authorizationHeader.substring(7);
-            authService.editRole(id, role, jwt);
+            authService.editRole(userId, role, jwt);
             return ResponseEntity.ok().build();
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
         }
     }
 
+    @PreAuthorize("hasRole(\"ADMIN\") or #userId == principal.id")
     @DeleteMapping("/delete-account/{userId}")
-    public ResponseEntity<Void> deleteAccount(@PathVariable String userId,
-                                            @RequestHeader("Authorization") String authorizationHeader) {
+    public ResponseEntity<?> deleteAccount(@PathVariable String userId) {
         try {
-            String jwt = authorizationHeader.substring(7);
-            authService.deleteAccount(userId, jwt);
+            authService.deleteAccount(userId);
             return ResponseEntity.ok().build();
         } catch (AuthenticationException e) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).build();
@@ -79,7 +80,7 @@ public class AuthenticationController {
     }
 
     @PostMapping("/account-exists")
-    public ResponseEntity<Void> accountExists(@RequestBody String username) {
+    public ResponseEntity<?> accountExists(@RequestBody String username) {
         try {
             authService.accountExists(username);
             return ResponseEntity.ok().build();

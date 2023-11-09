@@ -59,7 +59,7 @@ public class NotificationController {
         }
     }
 
-    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @notificationService.isOwner(#id, authentication.principal.id)")
+    @PreAuthorize("hasAuthority(\"ROLE_ADMIN\") or @notificationService.isOwner(#id, principal.id)")
     @PutMapping("/markAsRead/{id}")
     public ResponseEntity<?> markNotificationAsRead(String id) {
         try {

@@ -16,4 +16,8 @@ public class MediaService {
                 .map(media -> media.getUserId().equals(authenticatedId))
                 .orElse(false);
     }
+
+    public void deleteProductMedia(String productId) {
+        mediaRepository.deleteByProductId(productId);
+    }
 }
