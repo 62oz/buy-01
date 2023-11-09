@@ -17,4 +17,9 @@ public class ProductConsumer {
     public void updateInventory(OrderItemRequest orderItemRequest) {
         productService.updateInventory(orderItemRequest);
     }
+
+    @KafkaListener(topics = "delete-account", groupId = "product-service")
+    public void deleteUserProducts(String accountId) {
+        productService.deleteUserProducts(accountId);
+    }
 }

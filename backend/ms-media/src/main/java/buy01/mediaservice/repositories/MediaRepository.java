@@ -10,5 +10,6 @@ import java.util.List;
 public interface MediaRepository extends MongoRepository<Media, String> {
     List<Media> findByUserId(String userId);
     List<Media> findByProductId(String productId);
+    void deleteByProductId(String productId);
 }
 

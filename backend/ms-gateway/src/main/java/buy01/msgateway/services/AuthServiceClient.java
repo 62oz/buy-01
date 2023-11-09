@@ -55,7 +55,7 @@ public class AuthServiceClient {
     }
 
     public void deleteAccount(String id) {
-        ResponseEntity<Void> responseMedia = restTemplate.postForEntity(
+/*         ResponseEntity<Void> responseMedia = restTemplate.postForEntity(
             "http://ms-media/api/media/delete-account-media" + id,
             null,
             Void.class);
@@ -89,14 +89,14 @@ public class AuthServiceClient {
 
         if (responseUser.getStatusCode() != HttpStatus.OK) {
             throw new AuthenticationException("Account deletion failed. Can't delete account user.");
-        }
+        } */
 
-        ResponseEntity<Void> responseAccount = restTemplate.postForEntity(
+        ResponseEntity<Void> response = restTemplate.postForEntity(
             "http://ms-auth/api/auth/delete-account" + id,
             null,
             Void.class);
 
-        if (responseAccount.getStatusCode() != HttpStatus.OK) {
+        if (response.getStatusCode() != HttpStatus.OK) {
             throw new AuthenticationException("Account deletion failed.");
         }
     }

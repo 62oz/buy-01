@@ -77,6 +77,12 @@
             <artifactId>spring-security-core</artifactId>
         </dependency>
 
+        <!-- Kafka Dependencies -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
+
         <!-- Miscellaneous Dependencies -->
         <dependency>
             <groupId>javax.xml.bind</groupId>
