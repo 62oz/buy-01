@@ -25,6 +25,7 @@ Here we complete all the basic CRUD operations for the main microservices i.e. a
 - Media make request to hosting service in backend (includes validation).
 - ~~Delete user should delete associated products.~~
 - ~~Delete product should delete associated media.~~
+- This was done pretty badly so improve ^.
 #### Notification service init
 ##### Overview
 Here we initialise the basic setup for the notifications service, including CRUD and we also introduce delete cascades accross all services.
