@@ -21,16 +21,16 @@ Other strategies could be token blacklisting, which would reek the most benefits
 Here we complete all the basic CRUD operations for the main microservices i.e. auth, product, user, and media along with restrictions based on authentication and role.
 ##### Problems and visions
 - Same as previous.
-- Next add microservices for orders, ~~notifications~~, and messages.
+- Next add microservices ~~for orders,~~ ~~notifications~~, and messages.
 - Media make request to hosting service in backend (includes validation).
 - ~~Delete user should delete associated products.~~
 - ~~Delete product should delete associated media.~~
-- This was done pretty badly so improve ^.
+- ~~This was done pretty badly so improve ^.~~
 #### Notification service init
 ##### Overview
 Here we initialise the basic setup for the notifications service, including CRUD and we also introduce delete cascades accross all services.
 ##### Problems and visions
-- Implement asynchronous communication in services to send notifications using Kafka (mayeb after all services and CRUDs are setup).
+- ~~Implement asynchronous communication in services to send notifications using Kafka (mayeb after all services and CRUDs are setup).~~
 - ~~Implement SecurityConfig in each MS that parses the JWT and populates the SecurityContext (this will allow us to use principal in @PreAuthorize).~~
 #### Order service init
 ##### Overview
