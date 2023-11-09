@@ -10,6 +10,7 @@ import java.security.PublicKey;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.X509EncodedKeySpec;
 
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import io.jsonwebtoken.Claims;
@@ -32,6 +33,14 @@ public class JwtService {
         } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
             throw new IllegalStateException("Could not load keys", e);
         }
+    }
+
+    public String getAuthenticatedId() {
+        Object principal = SecurityContextHolder.getContext().getAuthentication().getPrincipal();
+        if (principal instanceof JwtUserDetails) {
+            return ((JwtUserDetails) principal).getUserId();
+        }
+        throw new IllegalStateException("Could not get authenticated user ID");
     }
 
 
