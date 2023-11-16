@@ -24,7 +24,7 @@ public class Order {
     @NotNull
     private OrderStatus status = OrderStatus.PENDING;
     @NotNull
-    private PaymentMethod paymentMethod;
+    private PaymentMethod paymentMethod = PaymentMethod.CASH_ON_DELIVERY;
     @NotNull
     private LocalDateTime orderDate;
     private BigDecimal totalAmount = BigDecimal.ZERO;

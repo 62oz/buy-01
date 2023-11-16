@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 
 import buy01.productservice.kafka.ProductProducer;
 import buy01.productservice.models.OrderItemRequest;
+import buy01.productservice.models.OrderRequest;
 import buy01.productservice.repositories.ProductRepository;
 import buy01.productservice.models.Product;
 import buy01.productservice.models.ProductRequest;
@@ -69,7 +70,7 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found for id:" + productId));
     }
 
-    public void updateInventory(OrderItemRequest orderItemRequest) {
+    public void updateAvailableQuantity(OrderItemRequest orderItemRequest) {
         String productId = orderItemRequest.getProductId();
         Integer quantity = orderItemRequest.getQuantity();
         productRepository.findById(productId)
@@ -80,8 +81,22 @@ public class ProductService {
                 .orElseThrow(() -> new RuntimeException("Product not found for id:" + productId));
     }
 
+    public void updateQuantity(OrderRequest order) {
+        order.getItems().forEach(orderItem -> {
+            String productId = orderItem.getProductId();
+            Integer quantity = orderItem.getQuantity();
+            productRepository.findById(productId)
+                    .map(product -> {
+                        product.setQuantity(product.getQuantity() - quantity);
+                        productProducer.itemsSoldNotification(product);
+                        return productRepository.save(product);
+                    })
+                    .orElseThrow(() -> new RuntimeException("Product not found for id:" + productId));
+        });
+    }
+
     public void deleteProduct(String productId) {
-        productProducer.deleteProduct(productId);
+        productProducer.deleteProductMedia(productId);
         productRepository.deleteById(productId);
     }
 
@@ -90,7 +105,7 @@ public class ProductService {
         productsOptionals.forEach(productOptional -> {
             productOptional.ifPresent(product -> {
                 productRepository.deleteById(product.getId());
-                productProducer.deleteProduct(product.getId());
+                productProducer.deleteProductMedia(product.getId());
             });
         });
     }

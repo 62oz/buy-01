@@ -75,7 +75,7 @@ public class OrderService {
         BigDecimal quantityBD = BigDecimal.valueOf(orderItem.getQuantity());
         pendingOrder.getTotalAmount().add(quantityBD.multiply(orderItem.getUnitPrice()));
         orderRepository.save(pendingOrder);
-        orderProducer.updateInventory(orderItem);
+        orderProducer.updateAvailableQuantity(orderItem);
         return pendingOrder;
     }
 
@@ -107,7 +107,18 @@ public class OrderService {
         pendingOrder.getTotalAmount().subtract(quantityBD.multiply(orderItem.getUnitPrice()));
         orderRepository.save(pendingOrder);
         orderItem.setQuantity(-orderItem.getQuantity());
-        orderProducer.updateInventory(orderItem);
+        orderProducer.updateAvailableQuantity(orderItem);
+        return pendingOrder;
+    }
+
+    public Order checkout(String userId) {
+        Order pendingOrder = getPending(userId);
+        if (pendingOrder == null) {
+            throw new RuntimeException("There is no pending order for user with id: " + userId);
+        }
+        pendingOrder.setStatus(OrderStatus.COMPLETED);
+        orderRepository.save(pendingOrder);
+        orderProducer.updateQuantity(pendingOrder);
         return pendingOrder;
     }
 }
