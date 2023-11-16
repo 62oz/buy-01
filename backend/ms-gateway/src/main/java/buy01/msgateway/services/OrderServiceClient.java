@@ -16,6 +16,18 @@ public class OrderServiceClient {
 
     private final RestTemplate restTemplate;
 
+    public ResponseEntity<?> getMyOrders(String userId) {
+        ResponseEntity<?> response = restTemplate.getForEntity(
+            "http://ms-order/api/order/my-orders/" + userId,
+            Void.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to get orders");
+        }
+
+        return response;
+    }
+
     public void createOrder(String userId) {
         ResponseEntity<Void> response = restTemplate.postForEntity(
             "http://ms-order/api/order/create/" + userId,
@@ -76,5 +88,19 @@ public class OrderServiceClient {
         if (responseOrder.getStatusCode() != HttpStatus.OK) {
             throw new RuntimeException("Failed to remove item from order.");
         }
+    }
+
+    public ResponseEntity<?> checkout(String userId) {
+        ResponseEntity<?> response = restTemplate.exchange(
+            "http://ms-order/api/order/checkout/" + userId,
+            HttpMethod.PUT,
+            null,
+            Void.class);
+
+        if (response.getStatusCode() != HttpStatus.OK) {
+            throw new RuntimeException("Failed to checkout order");
+        }
+
+        return response;
     }
 }
