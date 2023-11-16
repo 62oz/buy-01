@@ -2,6 +2,7 @@ package buy01.msgateway.controllers;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -18,6 +19,12 @@ import lombok.RequiredArgsConstructor;
 public class OrderController {
 
     private final OrderServiceClient orderServiceClient;
+
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or hasRole(\"ROLE_CLIENT\")")
+    @GetMapping("/my-orders/{userId}")
+    public ResponseEntity<?> getMyOrders(@PathVariable String userId) {
+        return ResponseEntity.ok(orderServiceClient.getMyOrders(userId));
+    }
 
     @PreAuthorize("hasRole(\"ROLE_ADMIN\") or hasRole(\"ROLE_CLIENT\")")
     @PutMapping("/empty/{userId}")
@@ -41,6 +48,13 @@ public class OrderController {
     // productId, quantity, and unitPrice of the product
     public ResponseEntity<?> removeItem(@PathVariable String userId, @RequestBody OrderItemRequest orderItem) {
         orderServiceClient.removeItem(userId, orderItem);
+        return ResponseEntity.ok().build();
+    }
+
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or hasRole(\"ROLE_CLIENT\")")
+    @PutMapping("/checkout/{userId}")
+    public ResponseEntity<?> checkout(@PathVariable String userId) {
+        orderServiceClient.checkout(userId);
         return ResponseEntity.ok().build();
     }
 }

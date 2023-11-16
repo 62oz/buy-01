@@ -47,4 +47,11 @@ public class OrderController {
         Order updatedOrder = orderService.removeItem(userId, orderItem);
         return new ResponseEntity<>(updatedOrder, HttpStatus.OK);
     }
+
+    @PreAuthorize("hasRole(\"ROLE_ADMIN\") or #userId == principal.id")
+    @PutMapping("/checkout/{userId}")
+    public ResponseEntity<?> checkout(@PathVariable String userId) {
+        Order checkedOutOrder = orderService.checkout(userId);
+        return new ResponseEntity<>(checkedOutOrder, HttpStatus.OK);
+    }
 }
