@@ -38,8 +38,8 @@ Here we initialize the order microservice and client discoverable.
 The CRUD endpoints needed: every user gets an order entity at account creation and it has different possible statuses. For now order can be cancelled (emptied) and we can add or remove items.
 Kafka: When a user orders a quantity of a product, the product inventory is asynchronously upadted with a kafka message.
 ##### Problems and visions
-- Kafka messages to notify, for example: about a product available quantity reaching 0 (to the user who posted the product). What else can we come up with? This is just for fun I guess lol but would be nice to have a somewhat complete e-commerce page at the end of this.
-- We can't yet complete order.
+- ~~Kafka messages to notify, for example: about a product available quantity reaching 0 (to the user who posted the product). What else can we come up with? This is just for fun I guess lol but would be nice to have a somewhat complete e-commerce page at the end of this.~~
+- ~~We can't yet complete order.~~
 - ~~Currently order is created at user creation, but a user should be able to keep completed orders in history, so: add ability to create a new order if there are no status.PENDING orders.~~
 #### Improvements
 ##### Overview
