@@ -1,16 +1,14 @@
 package buy01.authservice.services;
 
 import java.io.IOException;
+import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.security.KeyFactory;
-import java.security.KeyPair;
-import java.security.NoSuchAlgorithmException;
-import java.security.PrivateKey;
-import java.security.PublicKey;
-import java.security.spec.InvalidKeySpecException;
-import java.security.spec.PKCS8EncodedKeySpec;
-import java.security.spec.X509EncodedKeySpec;
+import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.util.io.pem.PemReader;
+import java.security.*;
+import java.security.spec.*;
+
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,17 +39,24 @@ public class JwtService {
     @PostConstruct
     public void init() {
         try {
+            Security.addProvider(new BouncyCastleProvider());
+
             byte[] privateKeyBytes = Files.readAllBytes(Paths.get(PRIVATE_KEY_PATH));
-            PKCS8EncodedKeySpec keySpec = new PKCS8EncodedKeySpec(privateKeyBytes);
-            KeyFactory keyFactory = KeyFactory.getInstance("RSA");
-            PrivateKey privateKey = keyFactory.generatePrivate(keySpec);
+            PemReader pemReader = new PemReader(new StringReader(new String(privateKeyBytes)));
+            byte[] pemContent = pemReader.readPemObject().getContent();
+            PKCS8EncodedKeySpec privateKeySpec = new PKCS8EncodedKeySpec(pemContent);
+            KeyFactory keyFactory = KeyFactory.getInstance("RSA", "BC");
+            PrivateKey privateKey = keyFactory.generatePrivate(privateKeySpec);
 
             byte[] publicKeyBytes = Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH));
-            X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
-            PublicKey publicKey = keyFactory.generatePublic(x509KeySpec);
+            pemReader = new PemReader(new StringReader(new String(publicKeyBytes)));
+            pemContent = pemReader.readPemObject().getContent();
+            X509EncodedKeySpec publicKeySpec = new X509EncodedKeySpec(pemContent);
+            PublicKey publicKey = keyFactory.generatePublic(publicKeySpec);
 
             keyPair = new KeyPair(publicKey, privateKey);
-        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException e) {
+        } catch (IOException | NoSuchAlgorithmException | InvalidKeySpecException | NoSuchProviderException e) {
+            e.printStackTrace();
             throw new IllegalStateException("Could not load keys", e);
         }
     }

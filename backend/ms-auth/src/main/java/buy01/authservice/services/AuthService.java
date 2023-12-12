@@ -7,6 +7,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 import buy01.authservice.models.AuthResponse;
 import buy01.authservice.models.LoginRequest;
@@ -19,6 +20,7 @@ import buy01.authservice.repositories.AccountRepository;
 import jakarta.annotation.PostConstruct;
 import lombok.RequiredArgsConstructor;
 
+@Service
 @RequiredArgsConstructor
 public class AuthService {
     @Value("${admin.default.name}")

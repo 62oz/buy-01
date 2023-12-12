@@ -21,7 +21,6 @@ import lombok.NoArgsConstructor;
 public class Account implements UserDetails {
     @Id
     private String id;
-    @Id
     private String userId;
     private String username;
     private String email;
