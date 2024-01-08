@@ -9,6 +9,7 @@ import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import jakarta.annotation.PostConstruct;
 
+import java.util.Base64;
 import java.util.Collections;
 import java.io.IOException;
 import java.nio.file.Files;
@@ -30,7 +31,12 @@ public class JwtService {
     @PostConstruct
     public void init() {
         try {
-            byte[] publicKeyBytes = Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH));
+            String publicKeyPEM = new String(Files.readAllBytes(Paths.get(PUBLIC_KEY_PATH)))
+                .replace("-----BEGIN PUBLIC KEY-----", "")
+                .replace("-----END PUBLIC KEY-----", "")
+                .replaceAll("\\s", ""); // Remove line breaks and whitespace
+
+            byte[] publicKeyBytes = Base64.getDecoder().decode(publicKeyPEM);
             X509EncodedKeySpec x509KeySpec = new X509EncodedKeySpec(publicKeyBytes);
             PublicKey publicKey = KeyFactory.getInstance("RSA").generatePublic(x509KeySpec);
 
